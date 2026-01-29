@@ -1,0 +1,10 @@
+// Server Create Karna
+//Server Config Karna
+
+const express = require("express")
+
+const app = express()
+
+app.use(express.json())
+
+module.exports = app
