@@ -48,7 +48,7 @@ app.patch("/api/notes/:id",async (req,res)=>{
   })
 })
 console.log(__dirname)
-app.use("*name/", (req, res) => {
+app.use("*name", (req, res) => {
   res.sendFile(path.join(__dirname,"./public/index.html"));
 });
 
