@@ -47,10 +47,10 @@ app.patch("/api/notes/:id",async (req,res)=>{
     message:"note updated successfully"
   })
 })
-
-app.get("*name",(req,res)=>{
-  res.sendFile((path.join(__dirname,"public","index.html")))
-})
+console.log(__dirname)
+app.use("*name", (req, res) => {
+  res.sendFile(path.join(__dirname,"/public/index.html"));
+});
 
 
 app.listen(3000,()=>{
