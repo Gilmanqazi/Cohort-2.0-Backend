@@ -1,5 +1,4 @@
 const app = require("./src/app")
-require("dotenv").config()
 const connectToDB = require("./src/config/database")
 const noteModel = require("./src/models/note.model")
 const path = require("path")
