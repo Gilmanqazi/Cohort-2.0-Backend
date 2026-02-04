@@ -3,6 +3,7 @@ const connectToDB = require("./src/config/database")
 const noteModel = require("./src/models/note.model")
 const path = require("path")
 
+
 connectToDB()
 
 
@@ -47,7 +48,7 @@ app.patch("/api/notes/:id",async (req,res)=>{
   })
 })
 console.log(__dirname)
-app.use("*name", (req, res) => {
+app.use("*name/", (req, res) => {
   res.sendFile(path.join(__dirname,"./public/index.html"));
 });
 
