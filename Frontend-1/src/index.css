@@ -1,3 +1,5 @@
+
+
 *{
     margin: 0;
     padding: 0;
@@ -6,43 +8,145 @@
 html, body{
 height: 100%;
 width:100%;
-background-color: black;
-color: rgb(15, 15, 15);
-/* padding: 5px 10px; */
-
 }
 
 .notes{
-  height: 110vh;
+  min-height: 100vh;
   width: 100%;
-  border-radius: 10px;
-  background-color: bisque;
+  background-color: black;
+  color: black;
   display: flex;
-  align-items: center;
-justify-content: center;
-flex-wrap: wrap;
-  gap: 30px;
-
+  justify-content: center;
+  padding: 10px 20px;
+  flex-wrap: wrap;
+  gap: 20px;
 }
+
 .note{
-  height: 250px;
-  width: 250px;
- text-align: center;
- border-radius: 10px;
- background-color: rgb(151, 145, 145);
-
-}
-.note img{
-  height: 170px;
-  width: 250px;
-  object-fit: cover;
-  overflow: hidden;
+  height: 300px;
+  width:280px;
+  background-color: rgb(202, 193, 193);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
   border-radius: 10px;
+}
+.note h1{
+  font-size: 22px;
+  padding: 5px;
 }
 .note p{
   font-weight: bold;
-font-size: 15px;
+  font-size: 15px;
+  text-align: center;
 }
-.note h1{
-  font-size: 25px;
+.imgdiv{
+  height: 200px;
+  width: 230px;
+  border-radius: 20px;
+}
+.note img{
+  height: 100%;
+  width: 100%;
+  object-fit: cover;
+  border-radius: 20px;
+}
+
+.inp{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 20px;
+  padding: 10px 20px;
+  background-color: rgb(55, 0, 255);
+}
+.inp input{
+  padding: 10px 20px;
+  border: none;
+  border-radius: 10px;
+  outline: none;
+}
+button{
+  padding: 10px 20px;
+  border: none;
+  border-radius: 10px;
+  outline: none;
+  background-color: lightseagreen;
+  font-weight: bold;
+  color: white;
+}
+.btns{
+  display: flex;
+  gap: 5px;
+  margin-top: 5px;
+}
+
+.modal-overlay{
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;  
+  height: 100vh; 
+  background-color: rgba(0, 0, 0, 0.7) !important; 
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999; 
+}
+
+.modal-box {
+  background: rgb(4, 141, 253);
+  padding: 20px;
+  border-radius: 10px;
+  width: 400px;
+  box-shadow: 0px 5px 15px rgba(0,0,0,0.3);
+}
+
+.modal-box form {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.modal-btns {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 10px;
+}
+.modal-box button{
+  background-color: black;
+  color: white;
+  font-weight: bold;
+}
+
+/* 
+.notes {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 80px;
+  padding: 20px;
+  flex-wrap: wrap;
+} */
+
+.note img {
+  width: 100%;
+  height: 170px;
+  object-fit: cover;
+  padding: 10px 10px;
+}
+
+.update-inp input{
+  padding: 10px 20px;
+  border-radius: 5px;
+  border: none;
+  font-size: 15px;
+  font-weight: 700;
+}
+.update-inp textarea{
+  padding: 10px 20px;
+  border-radius: 5px;
+  border: none;
+  font-size: 15px;
+  font-weight: 700;
 }

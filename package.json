@@ -1,7 +1,8 @@
 {
   "dependencies": {
     "cat-me": "^1.0.3",
-    "express": "^5.2.1"
+    "express": "^5.2.1",
+    "mongoose": "^9.1.5"
   },
   "name": "cohort-2-backend",
   "version": "1.0.0",
@@ -12,5 +13,13 @@
   },
   "keywords": [],
   "author": "",
-  "license": "ISC"
+  "license": "ISC",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Gilmanqazi/Cohort-2.0-Backend.git"
+  },
+  "bugs": {
+    "url": "https://github.com/Gilmanqazi/Cohort-2.0-Backend/issues"
+  },
+  "homepage": "https://github.com/Gilmanqazi/Cohort-2.0-Backend#readme"
 }
