@@ -7,7 +7,7 @@ const App = () => {
   const [selectedNote, setSelectedNote] = useState({ _id: null, img: "", desc: "", title: "", });
 
   function fetchData() {
-    axios.get("http://localhost:3000/api/notes")
+    axios.get("https://cohort-2-0-backend-15.onrender.com/api/notes")
       .then(({ data }) => 
         { 
           setNotes(data.notes); 
@@ -15,7 +15,7 @@ const App = () => {
   }
 
   function deleteHandler (noteId){
-    axios.delete(`http://localhost:3000/api/notes/`+noteId)
+    axios.delete(`https://cohort-2-0-backend-15.onrender.com/api/notes/`+noteId)
     .then(()=>{
       fetchData()
     })
@@ -29,7 +29,7 @@ const App = () => {
   function submitHandler(e) {
     e.preventDefault();
     const { img, title, desc } = e.target.elements;
-    axios.post("http://localhost:3000/api/notes", {
+    axios.post("https://cohort-2-0-backend-15.onrender.com/api/notes", {
       img: img.value,
       title: title.value,
       desc: desc.value
@@ -42,7 +42,7 @@ const App = () => {
   // 2. Purana Note Update Karne Ke Liye (PATCH)
   function finalUpdateHandler(e) {
     e.preventDefault();
-    axios.patch(`http://localhost:3000/api/notes/${selectedNote._id}`, selectedNote)
+    axios.patch(`https://cohort-2-0-backend-15.onrender.com/api/notes/${selectedNote._id}`, selectedNote)
       .then(() => {
         setIsModelOpen(false); 
         fetchData(); 
