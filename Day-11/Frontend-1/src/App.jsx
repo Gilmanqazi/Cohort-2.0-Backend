@@ -47,7 +47,7 @@ const App = () => {
         setIsModelOpen(false); 
         fetchData(); 
       });
-console.log({...selectedNote, img: e.target.value})
+
 
   }
 
