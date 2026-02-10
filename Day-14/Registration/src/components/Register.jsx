@@ -26,6 +26,7 @@ function changeHandle(e){
 async function HandlingForm(e){
   e.preventDefault()
   try {
+    
     const res = await axios.post("http://localhost:3000/api/auth/register",formHandle);
 
     localStorage.setItem("token",res.data.token)
