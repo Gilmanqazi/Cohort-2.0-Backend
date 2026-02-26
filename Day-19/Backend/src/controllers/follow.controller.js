@@ -19,7 +19,7 @@ async function followUserControllar (req,res){
   })
 
   if(AlreadyFollow){
-    return res.status(401).json({
+    return res.status(400).json({
       message:`You Already Following ${followingUsername}`
     })
   }
@@ -30,7 +30,7 @@ async function followUserControllar (req,res){
   })
 
   res.status(201).json({
-    message:`Youare now follownig ${followingUsername}`,
+    message:`You are now follownig ${followingUsername}`,
     follow
   })
 
@@ -47,12 +47,12 @@ async function unfollowController(req,res){
  })
 
  if(!unfollow){
-  res.status(409).json({
+  return res.status(409).json({
     message:"You are not following this User"
   })
  }
 
-res.status(409).json({
+res.status(200).json({
   message:"Unfollow successfull",
   unfollow
 })

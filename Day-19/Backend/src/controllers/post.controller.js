@@ -94,7 +94,7 @@ async function getFeedController(req, res) {
   const user = req.user
 
 
-  const posts = await Promise.all((await postModel.find().populate("user").lean())
+  const posts = await Promise.all((await postModel.find().populate("user").sort({_id:-1}).lean())
       .map(async (post) => {
 
           /**
@@ -106,7 +106,7 @@ async function getFeedController(req, res) {
               likes: post._id
           })
           
-    
+   
           post.isLiked = Boolean(isLiked);
     
           return post;  

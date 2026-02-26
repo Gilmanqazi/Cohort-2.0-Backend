@@ -1,0 +1,157 @@
+.main {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background: #0d0d0f;
+  min-height: 100vh;
+  color: #fff;
+}
+
+.feed {
+  width: 100%;
+  max-width: 500px;
+  margin-top: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.8rem;
+}
+
+/* POST CARD */
+
+.post-feed {
+  background: #111114;
+  border-radius: 18px;
+  border: 1px solid #1f1f23;
+  overflow: hidden;
+  box-shadow:
+    0 10px 30px rgba(0,0,0,0.6),
+    inset 0 1px 0 rgba(255,255,255,0.03);
+  transition: 0.3s;
+}
+
+.post-feed:hover {
+  transform: translateY(-4px);
+}
+
+/* USER HEADER */
+
+.user {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+  padding: 0.9rem;
+}
+
+.user h5 {
+  color: #e4e4e7;
+  font-weight: 500;
+}
+
+/* PROFILE IMAGE */
+
+.img-Wrapper {
+  height: 42px;
+  width: 42px;
+  border-radius: 50%;
+  background: conic-gradient(
+    from 120deg,
+    #833AB4,
+    #E1306C,
+    #F77737,
+    #FCAF45,
+    #833AB4
+  );
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  img {
+    height: 88%;
+    width: 88%;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid #0d0d0f;
+  }
+}
+
+/* POST IMAGE */
+
+.posts {
+  width: 100%;
+  aspect-ratio: 1/1;
+  background: #000;
+
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+}
+
+/* ICONS */
+
+.icons {
+  display: flex;
+  justify-content: space-between;
+  padding: 0.6rem 0.9rem;
+
+  svg {
+    width: 26px;
+    height: 26px;
+    cursor: pointer;
+    fill: #c9c9ce;
+    transition: 0.25s;
+  }
+
+  svg:hover {
+    transform: scale(1.15);
+    fill: white;
+  }
+
+  button {
+    background: transparent;
+    border: none;
+  }
+}
+
+/* LIKE ACTIVE */
+
+.like {
+  fill: #ff3040 !important;
+  animation: likePop 0.35s ease;
+}
+
+/* CAPTION */
+
+.bottom {
+  padding: 0 0.9rem 1rem 0.9rem;
+  font-size: 0.9rem;
+  color: #d4d4d8;
+
+  h3 {
+    display: inline;
+    font-weight: 600;
+    margin-right: 6px;
+    color: #fff;
+  }
+
+  h5 {
+    display: inline;
+    font-weight: 400;
+    color: #b4b4b8;
+  }
+}
+
+/* ANIMATION */
+
+@keyframes likePop {
+  0% {
+    transform: scale(0.7);
+  }
+  60% {
+    transform: scale(1.3);
+  }
+  100% {
+    transform: scale(1);
+  }
+}

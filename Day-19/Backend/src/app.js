@@ -22,6 +22,6 @@ app.use(cookieParser())
 app.use("/api/auth",authRouter)
 app.use("/api/posts",postRouter)
 app.use("/api/follow",followRouter)
-app.use("/api/like",likeRouter)
+app.use("/api/",likeRouter)
 
 module.exports = app
