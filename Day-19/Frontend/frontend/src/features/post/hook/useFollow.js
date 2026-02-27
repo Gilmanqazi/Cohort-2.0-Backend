@@ -6,12 +6,14 @@ const useFollow = () => {
   const [loading, setLoading] = useState(false);
   const [isFollowing, setIsFollowing] = useState(false);
 
+
   const handleFollow = useCallback(async (username) => {
     setLoading(true);
     await Follow(username);
     setIsFollowing(true);
     setLoading(false);
   }, []);
+  
 
   const handleUnfollow = useCallback(async (username) => {
     setLoading(true);
@@ -28,11 +30,14 @@ const useFollow = () => {
     }
   }, [isFollowing, handleFollow, handleUnfollow]);
 
+
   return {
     loading,
     isFollowing,
     toggleFollow
   };
+
+  
 };
 
 export default useFollow;

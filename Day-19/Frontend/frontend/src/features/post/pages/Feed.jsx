@@ -29,9 +29,10 @@ const Home = () => {
     
 
     <div className='feed'>
-      {feed.map((post,item,idx)=>{
+      {feed.map((post,idx)=>{
        
-       return <Feed key={idx} user={post.user} postisLiked={post.isLiked} postId={post._id}  postCaption={post.caption} postImg ={post.imgUrl} loading={loading} handleLike={handleLike}  handleUnLike={handleUnLike} username={item?.user?.username} handleFollow={handleFollow} handleUnfollow={handleUnfollow}  />
+       return <Feed key={idx} user={post.user} postisLiked={post.isLiked} postId={post._id}  postCaption={post.caption} postImg ={post.imgUrl} loading={loading} handleLike={handleLike}  handleUnLike={handleUnLike}  handleFollow={handleFollow} handleUnfollow={handleUnfollow}  />
+      //  username={item?.user?.username}
       })}
 
     </div>

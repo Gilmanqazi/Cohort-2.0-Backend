@@ -1,9 +1,19 @@
 import React from "react";
 import "../style/Follow.scss";
+// import FollowButton from "../pages/FollowButton";
+import useFollow from "../hook/useFollow";
 
+// username,handleFollow,handleUnfollow
 
+const Feed = ({user,postisLiked,postCaption,postImg,handleLike,handleUnLike,postId,}) => {
 
-const Feed = ({user,postisLiked,postCaption,postImg,handleLike,handleUnLike,postId,username,handleFollow,handleUnfollow}) => {
+  const {loading, isFollowing, toggleFollow } = useFollow();
+
+  // if(isFollowing.username === isFollowing.username){
+
+  //   alert(`You are no following ${user.username}`)
+  
+  // }
 
 
   return (
@@ -13,7 +23,15 @@ const Feed = ({user,postisLiked,postCaption,postImg,handleLike,handleUnLike,post
           <img src={user.profileImage} alt="" />
         </div>
         <h5>{user.username}</h5>
-        <button onClick={() => {user.username ? handleFollow(user.username):handleUnfollow(user.username)}}>Follow</button>
+        {/* <button onClick={() => {user.username ? handleFollow(user.username):handleUnfollow(user.username)}}><FollowButton/></button> */}
+        <button className="follow-btn"
+      onClick={() => toggleFollow(user.username)}
+      disabled={loading}
+    >
+      
+      {isFollowing ? "Unfollow" : "Follow"}
+     
+    </button>
       </div>
       <div className="posts">
         <div className="post">

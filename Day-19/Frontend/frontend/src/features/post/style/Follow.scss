@@ -1,31 +1,31 @@
-// .follow-btn {
-//   padding: 8px 18px;
-//   border-radius: 999px;
-//   border: none;
-//   font-size: 0.85rem;
-//   font-weight: 600;
-//   cursor: pointer;
-//   color: white;
+.follow-btn {
+  padding: 8px 18px;
+  border-radius: 999px;
+  border: none;
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+  color: white;
 
-//   background: linear-gradient(135deg, #ff3040, #ff7a18);
-//   transition: 0.25s;
-// }
+  background: linear-gradient(135deg, #ff3040, #ff7a18);
+  transition: 0.25s;
+}
 
-// .follow-btn:hover {
-//   transform: translateY(-2px);
-//   box-shadow: 0 6px 14px rgba(255, 48, 64, 0.35);
-// }
+.follow-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 14px rgba(255, 48, 64, 0.35);
+}
 
-// /* FOLLOWING STATE */
+/* FOLLOWING STATE */
 
-// .follow-btn {
-//   background: #0f0fc7;
-//   border: 1px solid #2a2a30;
-//   color: #d4d4d8;
-//   position: relative;
-//   left: 20%;
-// }
+.follow-btn {
+  background: #0f0fc7;
+  border: 1px solid #2a2a30;
+  color: #d4d4d8;
+  position: relative;
+  left: 20%;
+}
 
-// .follow-btn:hover {
-//   background: #2a2a30;
-// }
+.follow-btn:hover {
+  background: #2a2a30;
+}
