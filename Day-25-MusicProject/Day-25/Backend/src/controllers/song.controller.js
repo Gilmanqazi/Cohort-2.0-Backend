@@ -32,6 +32,7 @@ const [songFile,posterFile] = await Promise.all([
     posterUrl:posterFile.url,
      mood
    })
+
   
 res.status(201).json({
   message:"Song created successfully",
@@ -42,7 +43,7 @@ res.status(201).json({
 
 async function getSong(req,res){
   const {mood} = req.query
-
+  
   const song = await songModel.findOne({
      mood,
     
