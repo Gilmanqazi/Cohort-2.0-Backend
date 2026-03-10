@@ -44,10 +44,11 @@ res.status(201).json({
 async function getSong(req,res){
   const {mood} = req.query
   
-  const song = await songModel.findOne({
-     mood,
+  const song = await songModel.find({
+    mood:mood
     
   })
+
 
   res.status(200).json({
     message:"Song fetched successfully",
@@ -55,7 +56,19 @@ async function getSong(req,res){
   })
 }
 
+async function deleteSong (req,res){
+
+  const deleteSng = await songModel.findByIdAndDelete(req.params.id)
+
+res.status(200).json({
+  message:"Song Deleted Successfull"
+})
+
+
+}
+
 module.exports = {
   uploadSong,
-  getSong
+  getSong,
+  deleteSong
 }
