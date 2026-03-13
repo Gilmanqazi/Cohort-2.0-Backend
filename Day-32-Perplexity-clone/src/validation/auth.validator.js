@@ -23,3 +23,12 @@ export const validateRegister = [
   
   validate
 ]
+
+export const loginValidator = [
+  body("email").isEmail().withMessage("Please provide a valid email"),
+
+  body("password").notEmpty().withMessage("password is required"),
+
+  
+  validate
+]
