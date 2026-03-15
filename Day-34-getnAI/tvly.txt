@@ -1,0 +1,3 @@
+ title: "Who's Who | Maharashtra Medical Goods Procurement Authority",
+      url: 'https://mmgpa.maharashtra.gov.in/en/whos-who/',
+      content: 'Chief Minister Maharashtra, Hon. Shri. Devendra Sarita Gangadharrao Fadnavis, Chief Minister of Maharashtra State and and Chairperson procurement Authority',
