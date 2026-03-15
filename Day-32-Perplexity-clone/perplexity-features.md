@@ -41,3 +41,13 @@ GOOGLE_REFRESH_TOKEN=1//04DphSRVkpe2eCgYIARAAGAQSNwF-L9IrcplY3I_ntQs9rMLF5lwE4Rb
 
 GOOGLE_USER=gilmanqazi@gmail.com
 
+
+
+Generative AI = content generate karna [text,code,image,audio,video]
+
+
+AI service provider = 1. Training an LLM 2. Hosting an LLM, 3. Providing APIs to access the LLM
+
+eg. OpenAI, Cohere, Microsoft, Anthropic, Mistral, etc.
+
+

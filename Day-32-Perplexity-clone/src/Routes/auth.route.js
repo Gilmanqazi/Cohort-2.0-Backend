@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { registerContrller,verifyEmail ,loginController, getMe} from "../controllers/auth.controller.js";
+import { registerContrller,verifyEmail ,loginController, getMe,resendEmail} from "../controllers/auth.controller.js";
 import { validateRegister,loginValidator } from "../validation/auth.validator.js";
 import { authUser } from "../middleware/auth.middleware.js";
 
@@ -35,5 +35,8 @@ authRouter.post("/login",loginValidator,loginController)
 // @access Private
 
 authRouter.get("/get-me",authUser,getMe)
+
+
+authRouter.post("/resend-verification-email",resendEmail)
 
 export default authRouter

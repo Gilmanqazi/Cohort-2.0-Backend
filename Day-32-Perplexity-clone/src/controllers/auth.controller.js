@@ -37,7 +37,7 @@ to: email,
 subject:"Welcome to Perplexity!",
 html:`<p>Hi ${username}</p>
 <p>Thank for registering at <strong>perplexity</strong> </p>
-<a href="http://localhost:3000/api/auth/verify-email?token=${emailVarificationToken}"
+<a href="http://localhost:3000/api/auth/verify-email?token=${emailVarificationToken}"</a>
 <p>If you did not create an accound </p>
 `
 
@@ -98,7 +98,6 @@ const user = await userModel.findOne({
   ]
 })
 
-console.log(user , "User hai ")
 
 if(!user.verified){
   return res.status(400).json({
@@ -132,8 +131,6 @@ export async function getMe (req,res){
   
 const userId = req.user.id
 
-console.log(userId)
-
 const user = await userModel.findById(userId).select("-password");
 
 if(!user){
@@ -151,3 +148,61 @@ res.status(200).json({
 })
 
 }
+
+export async function resendEmail(req, res) {
+
+  try {
+
+    const { email } = req.body;
+
+    if (!email) {
+      return res.status(400).json({
+        message: "Email is required"
+      });
+    }
+
+    const user = await userModel.findOne({ email });
+
+    if (!user) {
+      return res.status(404).json({
+        message: "User not found"
+      });
+    }
+
+    if (user.verified) {
+      return res.status(400).json({
+        message: "Email already verified"
+      });
+    }
+
+    const token = jwt.sign(
+      { email: user.email },
+      process.env.JWT_SECRET,
+      { expiresIn: "1d" }
+    );
+
+    const verifyLink = `http://localhost:3000/api/auth/verify-email?token=${token}`;
+
+    await sendMail({
+      to: user.email,
+      subject: "Verify your email",
+      html: `
+        <p>Click below to verify your email</p>
+        <a href="${verifyLink}">Verify Email</a>
+      `
+    });
+
+    res.status(200).json({
+      message: "Verification email resent successfully"
+    });
+
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({
+      message: "Server error"
+    });
+  }
+
+}
+
+
