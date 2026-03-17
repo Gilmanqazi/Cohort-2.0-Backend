@@ -61,7 +61,7 @@ async function handleGetMe (){
     return data
 
   }catch(err){
-    dispatch(setError(err.res?.data?.message || "Failed to fetch user"))
+    dispatch(setError(err.response?.data?.message || "Failed to fetch user"))
   }finally{
     dispatch(setLoading(false))
   }

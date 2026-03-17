@@ -4,10 +4,16 @@ import {
   FiUser, FiSettings, FiSend, FiTrash2, FiX, FiZap 
 } from 'react-icons/fi';
 
+import { useSelector } from 'react-redux';
+
 const ChatUI = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
   const [input, setInput] = useState("");
   const [currentChatId, setCurrentChatId] = useState(1); // Track active chat
+
+  const {user} = useSelector(state => state.auth)
+
+  console.log(user)
   
   // Dummy History Data - In a real app, this comes from API
   const chatHistory = [

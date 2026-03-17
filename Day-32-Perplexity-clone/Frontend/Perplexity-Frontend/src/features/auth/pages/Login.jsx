@@ -3,10 +3,15 @@ import { useAuth } from '../Hook/useAuth';
 import { useNavigate, Link } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { FiArrowRight, FiShield, FiZap } from 'react-icons/fi';
+import { useSelector } from 'react-redux';
+import { Navigate } from 'react-router-dom';
 
 const Login = () => {
   const navigate = useNavigate();
   const { handleLogin } = useAuth();
+
+  const user = useSelector(state => state.auth.user)
+  const loading = useSelector(state => state.auth.loading)
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -35,6 +40,10 @@ const Login = () => {
       setIsSubmitting(false);
     }
   };
+
+  if(!loading && user){
+return <Navigate to="/" replace/>
+  }
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-[#020202] text-gray-200 font-sans relative overflow-hidden">
