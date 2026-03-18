@@ -3,6 +3,7 @@ import authRouter from "./Routes/auth.route.js"
 import cookieParser  from "cookie-parser"
 import cors from "cors"
 import morgan from "morgan"
+import chatRouter from "./Routes/chat.route.js"
 
 const app = express()
 
@@ -20,5 +21,6 @@ app.use(morgan("dev"))
 
 
 app.use("/api/auth",authRouter)
+app.use("/api/chats",chatRouter)
     
 export default app
