@@ -1,4 +1,4 @@
-import mongoose, { mongo } from "mongoose";
+import mongoose from "mongoose";
 
 const messageSchema = new mongoose.Schema({
   chat:{
@@ -18,7 +18,7 @@ required:true
     required:true,
   },
   
-},{timeseries:true});
+},{timestamps:true});
 const messageModel = mongoose.model("Message", messageSchema);
 
 export default messageModel

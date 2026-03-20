@@ -1,4 +1,4 @@
-import {createBrowserRouter} from "react-router-dom"
+import {createBrowserRouter, Navigate} from "react-router-dom"
 import Login from "../features/auth/pages/Login"
 import Register from "../features/auth/pages/Register"
 import ChatUI from "../features/chat/pages/ChatUI"
@@ -17,5 +17,9 @@ element: <Protected><ChatUI/></Protected>
   {
     path:"/register",
     element: <Register/>
+  },
+  {
+    path:"/chat",
+    element:<Navigate to="/" replace/>
   }
 ])

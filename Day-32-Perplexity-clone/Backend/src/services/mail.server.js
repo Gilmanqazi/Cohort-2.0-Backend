@@ -26,5 +26,6 @@ to,subject,html,text
   }
 
   const details = await transporter.sendMail(mailOption)
+  console.log("Email sent:", details);
 
 }
