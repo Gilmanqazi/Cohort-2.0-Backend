@@ -4,6 +4,7 @@ import cookieParser  from "cookie-parser"
 import cors from "cors"
 import morgan from "morgan"
 import chatRouter from "./Routes/chat.route.js"
+import path from "path"
 
 const app = express()
 
@@ -12,6 +13,12 @@ app.use(cors({
   credentials:true,
   methods:["GET", "POST", "PUT", "DELETE"]
 }))
+
+app.use(express.static("../Frontend/Perplexity-Frontend/dist"))
+
+app.get((req, res) => {
+  res.sendFile(path.resolve("../Frontend/Perplexity-Frontend/dist/index.html"))
+})
 
 //Middleware
 app.use(express.json())
