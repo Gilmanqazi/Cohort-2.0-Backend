@@ -14,9 +14,9 @@ app.use(cors({
   methods:["GET", "POST", "PUT", "DELETE"]
 }))
 
-app.use(express.static("../Frontend/Perplexity-Frontend/dist"))
+app.use(express.static(path.resolve("../Frontend/Perplexity-Frontend/dist")))
 
-app.get((req, res) => {
+app.guse((req, res) => {
   res.sendFile(path.resolve("../Frontend/Perplexity-Frontend/dist/index.html"))
 })
 
