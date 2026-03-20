@@ -16,7 +16,7 @@ app.use(cors({
 
 app.use(express.static(path.resolve("../Frontend/Perplexity-Frontend/dist")))
 
-app.guse((req, res) => {
+app.use((req, res) => {
   res.sendFile(path.resolve("../Frontend/Perplexity-Frontend/dist/index.html"))
 })
 
