@@ -1,0 +1,6 @@
+//RAG is very Important
+
+
+STORY.PDF=>chunks=>embedding=>storeIn(Vector-Store)
+
+user:"How was the internShip experience" =>mistralEmbed=> conver => embedding => PineCone vectorStore =>AIServiseProvider
