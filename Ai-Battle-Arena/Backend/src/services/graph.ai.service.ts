@@ -83,9 +83,8 @@ const graph = new StateGraph(state)
 
 export default async function (problem:string){
   const result = await graph.invoke({
-    problem:problem
+    problem:problem,
   })
 
-  console.log(result)
   return result
 }
