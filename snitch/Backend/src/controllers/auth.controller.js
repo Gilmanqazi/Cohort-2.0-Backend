@@ -31,14 +31,14 @@ export const registerController = async (req,res) => {
  try {
   const {fullname,contact,email,password,isSeller} = req.body
 
-  const alredyExist = await userModel.findOne({
+  const alreadyExist = await userModel.findOne({
     $or:[
       {email},{contact}
     ]
   })
 
-  if(alredyExist){
-    return res.status(401).json({
+  if(alreadyExist){
+    return res.status(400).json({
       message:"User already exist"
     })
   }
@@ -78,4 +78,47 @@ try {
   })
   console.log(error)
 }
+}
+
+export const googleCallback = async (req,res) =>{
+
+try {
+
+  if (!req.user) {
+    return res.redirect("/login?error=failed");
+}
+  const user = req.user
+console.log(user.id,user.emails,"USERRRR")
+
+const Google_Token = jwt.sign({
+  id:user.id, email:user.emails
+},
+
+config.JWT_SECRET,{expiresIn:"7d"})
+
+res.cookie("token",Google_Token)
+
+res.redirect("http://localhost:5173/")
+
+} catch (error) {
+  console.error("Google Auth Error",error)
+  res.redirect("/login?error=auth_failed");
+}
+}
+
+export const getMe = async (req,res) =>{
+
+  const user = await userModel.findById(req.user.id)
+
+  if(!user){
+    return res.status(409).json({
+      message:"User not found"
+    })
+  }
+
+  res.status(200).json({
+    message:"User fetched successfull",
+    user
+  })
+
 }

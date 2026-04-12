@@ -5,10 +5,10 @@ const userSchema = new mongoose.Schema({
  fullname:{
   type:String,
   required:[true,"Username is required"],
-  unique:true
+  unique:false
  },
  contact:{
-  type:Number,
+  type:String,
   required:[true,"Mobile number is required"]
  },
  email:{
@@ -40,6 +40,6 @@ userSchema.methods.comparePassword = async function (password) {
 }
 
 
-const userModel   = mongoose.model("users",userSchema)
+const userModel = mongoose.model("users",userSchema)
 
 export default userModel

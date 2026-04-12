@@ -17,7 +17,7 @@ export const registerValidator = [
   .matches(/^\d{10}$/).withMessage("Contact must be a 10 digit number"),
   body("email").isEmail().withMessage("Invalid email formate"),
 body("password").isLength({min:(6)}).withMessage("Password should be at least 6 characters long"),
-// body("isSaller").isBoolean().withMessage("isSaller must be a Boolean value"),
+body("isSeller").isBoolean().withMessage("isSeller must be a Boolean value"),
 
 validationRequest
 ]
