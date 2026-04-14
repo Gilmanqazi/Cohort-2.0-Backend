@@ -4,6 +4,8 @@ import userModel from "../models/user.model.js";
 import jwt from "jsonwebtoken"
 
 
+
+
  const sendTokenResponse = (user,res,message) =>{
 
   const token = jwt.sign({
@@ -84,19 +86,30 @@ export const googleCallback = async (req,res) =>{
 
 try {
 
-  if (!req.user) {
-    return res.redirect("/login?error=failed");
-}
-  const user = req.user
-console.log(user.id,user.emails,"USERRRR")
+const {id,displayName,emails,photos}  = req.user
 
-const Google_Token = jwt.sign({
-  id:user.id, email:user.emails
+const email =  emails[0].value
+const profilePic = photos[0].value
+
+let user = await userModel.findOne({
+  email
+})
+
+if(!user){
+  user = await userModel.create({
+    email,
+    googleId:id,
+    fullname:displayName
+  }) 
+}
+
+const token = jwt.sign({
+  id:user._id,
 },
 
 config.JWT_SECRET,{expiresIn:"7d"})
 
-res.cookie("token",Google_Token)
+res.cookie("token",token)
 
 res.redirect("http://localhost:5173/")
 

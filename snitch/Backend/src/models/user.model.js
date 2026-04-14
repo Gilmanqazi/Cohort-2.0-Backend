@@ -9,7 +9,7 @@ const userSchema = new mongoose.Schema({
  },
  contact:{
   type:String,
-  required:[true,"Mobile number is required"]
+  required:[false,"Mobile number is required"]
  },
  email:{
   type:String,
@@ -18,13 +18,19 @@ const userSchema = new mongoose.Schema({
  },
  password:{
   type:String,
-required:[true,"Password is required"],
+required:function(){
+  return !this.googleId
+},
 select:false
 },
 role:{
   type:String,
     enum:["seller","buyer"],
     default:"buyer"
+},
+googleId:{
+  type:String,
+
 }
 },{timestamps:true})
 
