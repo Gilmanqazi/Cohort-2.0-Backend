@@ -2,8 +2,13 @@ import React, { useState } from 'react';
 import { useAuth } from '../hook/useAuth';
 import { FcGoogle } from 'react-icons/fc'; 
 import modelRegister from "../../../assets/Model-Snitch-Register.jpeg"
+import {useNavigate} from "react-router-dom"
+import {toast} from "react-toastify"
 
 const Register = () => {
+
+  const navigate = useNavigate()
+
   const { handleRegister } = useAuth(); 
 
   const [fullname, setFullName] = useState("");
@@ -13,9 +18,15 @@ const Register = () => {
   const [isSeller, setIsSeller] = useState(false);
 
   const handleSubmit = async (e) => {
-    e.preventDefault();
-    await handleRegister({ fullname, contact, email, password, isSeller });
-    console.log("Form Submitted");
+try {
+  e.preventDefault();
+  await handleRegister({ fullname, contact, email, password, isSeller });
+toast.success("Registration Successfull")
+  navigate("/")
+} catch (error) {
+ console.log(error) 
+}
+    
   };
 
   return (

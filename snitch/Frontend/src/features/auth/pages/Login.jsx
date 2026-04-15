@@ -3,15 +3,19 @@ import { useAuth } from '../hook/useAuth';
 import { useForm } from "react-hook-form";
 import { FcGoogle } from 'react-icons/fc';
 import modelLogin from "../../../assets/Model-Snitch-Login.jpeg"
+import { toast } from 'react-toastify';
+import { useNavigate } from 'react-router-dom';
 
 const Login = () => {
+const navigate = useNavigate()
   const { handleLogin } = useAuth();
   const { register, reset, handleSubmit, formState: { errors } } = useForm();
 
   const onSubmit = async (data) => {
     await handleLogin(data);
     reset();
-    console.log("Form Submitted");
+   toast.success("Login Successfull")
+     navigate("/")
   };
 
   return (
@@ -95,6 +99,7 @@ const Login = () => {
                 <p className="text-xs text-zinc-500 tracking-widest">
                   Not a member? <a href="#" className="text-white hover:underline underline-offset-8">Join the Club</a>
                 </p>
+                
               </footer>
             </form>
           </div>
