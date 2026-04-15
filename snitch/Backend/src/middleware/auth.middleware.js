@@ -20,9 +20,9 @@ export const authenticationSeller = async (req,res,next)=>{
       return res.status(401).json({message:"Unauthorized"})
     }
 
-    if(!user.role == "seller"){
-      return res.status(403).json({message:"Forbidden"})
-    }
+    // if(user.role !== "seller"){
+    //   return res.status(403).json({message:"Forbidden"})
+    // }
 
     req.user = user
     next()
