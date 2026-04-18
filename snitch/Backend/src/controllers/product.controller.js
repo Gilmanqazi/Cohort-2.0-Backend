@@ -5,7 +5,7 @@ import {uploadFile} from "../services/storage.services.js"
 
 export const createProducts = async (req,res) =>{
  
-  const {title,description,priceAmount,priceCurrency} = req.body
+  const {title,description,priceAmount,priceCurrency,varients} = req.body
 
 const seller = req.user
 try {
@@ -25,7 +25,8 @@ price:{
   currency:priceCurrency || "INR"
 },
 images,
-seller:seller._id
+seller:seller._id,
+varients:varients || []
 })
 
 res.status(201).json({message:"Product Created Successfull",success:true,products})
@@ -33,6 +34,29 @@ res.status(201).json({message:"Product Created Successfull",success:true,product
   console.log(error)
 }
 
+}
+
+export const addVarientToProduct = async (req,res)=>{
+try {
+  const {productId} = req.params
+  const {images,stock,attribute,price} = req.body
+
+  const products = await productModel.findById(productId)
+  if(!products){
+    return res.status(404).json({ message: "Product not found" });
+  }
+
+  const newVarients = {
+images,stock,attribute,price
+  }
+  products.varients.push(newVarients)
+
+  await products.save()
+
+  res.status(200).json({ message: "Variant added successfully", products });
+} catch (error) {
+  res.status(500).json({ message: error.message });
+}
 }
 
 export const getSellerProducts = async (req,res) =>{
@@ -49,3 +73,34 @@ export const getSellerProducts = async (req,res) =>{
   })
 
 }
+
+export const getAllProducts = async (req,res) =>{
+
+  const products = await productModel.find()
+
+  res.status(200).json({
+    message:"Products fetches successfull",
+    success:true,
+    products
+  })
+
+}
+
+
+export const getProductById = async (req, res) => {
+  try {
+    const { id } = req.params; 
+    const products = await productModel.findById(id); 
+    if (!products) {
+      return res.status(404).json({ message: "Product nahi mila!" });
+    }
+
+    res.status(200).json({
+      message:"Products By Id successfull",
+      success:true,
+      products
+    })
+  } catch (error) {
+    res.status(500).json({ message: "Server error", error });
+  }
+};

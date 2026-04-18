@@ -20,9 +20,9 @@ export const authenticationSeller = async (req,res,next)=>{
       return res.status(401).json({message:"Unauthorized"})
     }
 
-    // if(user.role !== "seller"){
-    //   return res.status(403).json({message:"Forbidden"})
-    // }
+    if(user.role !== "seller"){
+      return res.status(403).json({message:"Forbidden"})
+    }
 
     req.user = user
     next()
@@ -32,4 +32,31 @@ export const authenticationSeller = async (req,res,next)=>{
     res.status(500).json({message:"Token not authorized"})
   }
 
+}
+
+export const authenticateUser = async (req,res,next)=>{
+
+    const token = req.cookies.token
+
+    if (!token) {
+      return res.status(401).json({ message: "Unauthorized" })
+  }
+  try{
+
+    const decoded = jwt.verify(token, config.JWT_SECRET)
+
+    const user = await userModel.findById(decoded.id)
+
+    if (!user) {
+        return res.status(401).json({ message: "Unauthorized" })
+    }
+
+    req.user = user
+    next()
+
+
+  }catch(err){
+    console.log(err)
+    return res.status(401).json({ message: "Unauthorized" })
+  }
 }
