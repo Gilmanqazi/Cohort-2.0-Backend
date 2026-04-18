@@ -10,14 +10,16 @@ try {
   const handleRegister = async ({fullname,contact,email,password,isSeller = false}) => {
   const data = await register({fullname,contact,email,password,isSeller})
   dispatch(setUser(data))
-  console.log(data)
+  return data
+  
   }
 
   const handleLogin = async (email,password) =>{
   const data = await login(email,password)
   dispatch(setUser(data.user))
+  return data.user
   
-  console.log(data.user)
+
   }
 
   const handleGetMe = async ()=>{

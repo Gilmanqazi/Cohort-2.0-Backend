@@ -1,5 +1,5 @@
-import { createProducts,getSellerProducts } from "../services/product.api";
-import { setSellerProducts } from "../state/product.slice";
+import { addToCart, createProducts,getAddToCart,getAllProducts,getProductById,getSellerProducts } from "../services/product.api";
+import { setAddToCart, setGetCartUser, setProductById, setProducts, setSellerProducts } from "../state/product.slice";
 import {useDispatch} from "react-redux"
 
 
@@ -23,5 +23,52 @@ const handleGetSellerProducts = async()=>{
   dispatch(setSellerProducts(data.products))
   return data.products
 }
-return {handleSelectProducts,handleGetSellerProducts}
+
+const handleGetAllProducts = async ()=>{
+  const data = await getAllProducts()
+ dispatch(setProducts(data.products))
+  return data.products
+}
+
+const handleProductById = async (id)=>{
+try {
+  console.log(id,"IDIDIDI")
+  const data  = await getProductById(id)
+console.log(data.products,"DATATA")
+  dispatch(setProductById(data.products))
+  return data.products
+} catch (error) {
+  console.log(error,"ERRRRRR")
+}
+}
+
+const handleAddToCart = async (productId) =>{
+  try {
+    const data = await addToCart(productId)
+    console.log("Success:", data);
+   dispatch(setAddToCart(data))
+    return data
+
+  } catch (error) {
+    console.log(error)
+    throw error
+  }
+}
+
+const handleGetAddToCart = async ()=>{
+  try {
+    const data = await getAddToCart()
+    console.log(data,"DATATATATA")
+    dispatch(setGetCartUser(data.getCarts))
+    return data.getCarts
+  } catch (error) {
+    console.log(error)
+    throw error
+  }
+}
+
+
+
+
+return {handleSelectProducts,handleGetSellerProducts,handleGetAllProducts,handleProductById,handleAddToCart,handleGetAddToCart}
 }

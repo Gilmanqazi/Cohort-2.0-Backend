@@ -4,12 +4,17 @@ import Login from "../features/auth/pages/Login"
 import CreateProduct from "../features/products/pages/CreateProducts"
 import GetSellerProducts from "../features/products/pages/GetSellerProducts"
 import ProtectedRoute from "../features/protectedRoute"
+import Home from "../features/products/pages/Home"
+import ProductsDetails from "../features/products/pages/ProductsDetails"
+import AddToCartPage from "../features/products/pages/addToCartPage"
+import CheckOut from "../features/products/pages/CheckOut"
+
 
 
 export const router = createBrowserRouter([
   {
     path:"/",
-    element:<h1>Weloome To Home</h1>
+    element:<Home/>
   },
   {
     path:"/register",
@@ -23,7 +28,7 @@ export const router = createBrowserRouter([
     
     path:"/createProduct",
     element:(
-      <ProtectedRoute allowedRole = "seller">
+      <ProtectedRoute Role = "seller">
         <CreateProduct/>
         </ProtectedRoute>
     )
@@ -32,9 +37,25 @@ export const router = createBrowserRouter([
   {
     path:"/getProducts",
     element:(
-      <ProtectedRoute allowedRole="seller">
+      <ProtectedRoute Role="seller">
     <GetSellerProducts/>
     </ProtectedRoute>
   )
-  }
+  },
+  {
+    path:"/products/:id",
+    element:<ProductsDetails/>
+  },
+  {
+    path:"/addToCart",
+    element:<AddToCartPage/>
+  },
+  {
+    path:"/checkout",
+   element:<ProtectedRoute Role="buyer">
+    <CheckOut/>
+   </ProtectedRoute>
+  },
+ 
+  
 ])

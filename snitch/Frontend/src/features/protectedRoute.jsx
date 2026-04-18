@@ -1,31 +1,27 @@
 import { useSelector } from "react-redux";
-import { Navigate } from "react-router";
+import { Navigate,useLocation } from "react-router";
 
-const ProtectedRoute = ({ children, allowedRole }) => {
+const ProtectedRoute = ({ children, Role = "buyer" }) => {
 
-  const { user , loading } = useSelector((state) => state.auth);
+  const location = useLocation()
 
-  console.log(user, "USER");
-  console.log(loading, "LOADING");
-  console.log(allowedRole)
+  const user  = useSelector((state) => state.auth.user);
+  const loading  = useSelector((state) => state.auth.loading);
+  
 
   if (loading) {
     return <h1>Loading...</h1>;
+  } 
+
+  if (!user) {
+    return <Navigate to="/login" replace state = {{from:location}} />;
   }
 
-  //  not logged in
-  if (!user) {
-    return <Navigate to="/login" replace />;
-  }
-  //  role mismatch
-  if (allowedRole && user.role !== allowedRole) {
+  if ( user.role !== Role) {
     return <Navigate to="/" replace />;
   }
 
 
-
-
-  //  allowed
   return children;
 };
 

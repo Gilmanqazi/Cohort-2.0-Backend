@@ -15,6 +15,7 @@ export const createProducts = async (formData) =>{
     return res.data
   } catch (error) {
     console.log(error)
+    console.error("Service Error:", error.response?.data || error.message);
     throw error
   }
 
@@ -23,6 +24,46 @@ export const createProducts = async (formData) =>{
 export const getSellerProducts = async ()=>{
   try {
     const res = await api.get("/seller")
+    return res.data
+  } catch (error) {
+    console.log(error)
+    throw error
+  }
+}
+
+export const getAllProducts = async () =>{
+  const res = await api.get("/")
+  console.log(res.data)
+  return res.data
+}
+
+
+export const getProductById = async (id) =>{
+ try {
+  console.log("Requesting URL:", `/products/${id}`);
+  const res = await api.get(`/${id}`)
+
+  return res.data
+ } catch (error) {
+  console.error(error,"ERR")
+ }
+
+}
+
+export const addToCart = async (productId) =>{
+  try {
+    const res = await api.post("/cart",{productId})
+    return res.data
+  } catch (error) {
+    console.log(error)
+    throw error
+  }
+}
+
+export const getAddToCart = async () =>{
+  try {
+    const res = await api.get("/cart/getUserCart")
+    console.log(res.data)
     return res.data
   } catch (error) {
     console.log(error)
