@@ -5,7 +5,7 @@ import {uploadFile} from "../services/storage.services.js"
 
 export const createProducts = async (req,res) =>{
  
-  const {title,description,priceAmount,priceCurrency,varients} = req.body
+  const {title,description,priceAmount,priceCurrency} = req.body
 
 const seller = req.user
 try {
@@ -26,7 +26,6 @@ price:{
 },
 images,
 seller:seller._id,
-varients:varients || []
 })
 
 res.status(201).json({message:"Product Created Successfull",success:true,products})
@@ -38,22 +37,46 @@ res.status(201).json({message:"Product Created Successfull",success:true,product
 
 export const addVarientToProduct = async (req,res)=>{
 try {
-  const {productId} = req.params
-  const {images,stock,attribute,price} = req.body
+  const productId = req.params.productId
 
-  const products = await productModel.findById(productId)
-  if(!products){
+  const product = await productModel.findOne({
+    _id:productId,
+    seller:req.user._id
+  })
+  
+  if(!product){
     return res.status(404).json({ message: "Product not found" });
   }
 
-  const newVarients = {
-images,stock,attribute,price
-  }
-  products.varients.push(newVarients)
+  const files = req.files
+  const images = []
 
-  await products.save()
+if(files || files.length !== 0){
+  (await Promise.all(files.map(async (file)=>{
+    const image = await uploadFile({
+      buffer:file.buffer,
+      fileName:file.originalname
+    })
+    return image
+  }))).map(image=> images.push(image))
+}
+ const price = req.body.priceAmount
+ const stock = req.body.stock 
+ const attributes = JSON.stringify(req.body.attributes || "{}")
 
-  res.status(200).json({ message: "Variant added successfully", products });
+ product.varients.push({
+  images,
+  price:{
+    amount:Number(price) || product.price.amount
+  },
+  stock,
+  attributes
+ })
+
+ await product.save()
+
+  res.status(200).json({ message: "Variant added successfully",success: true,
+    product  });
 } catch (error) {
   res.status(500).json({ message: error.message });
 }
@@ -104,3 +127,29 @@ export const getProductById = async (req, res) => {
     res.status(500).json({ message: "Server error", error });
   }
 };
+
+export const deleteProduct = async (req,res)=>{
+const productId = req.params.id
+const seller = req.user._id
+
+  console.log(productId,"IDD")
+  console.log(seller,"IDD")
+  const products = await productModel.findOne({
+    _id:productId,
+    seller:seller
+  })
+  if(!products){
+    return res.status(403).json({
+      message:"Forbidden",
+      success:false
+    })
+  }
+
+  products.images.map((e)=>{
+    console.log(e,"EEEE")
+  })
+
+  // const file = req.files
+
+  // console.log(file)
+}
