@@ -4,10 +4,12 @@ import Login from "../features/auth/pages/Login"
 import CreateProduct from "../features/products/pages/CreateProducts"
 import GetSellerProducts from "../features/products/pages/GetSellerProducts"
 import ProtectedRoute from "../features/protectedRoute"
-import Home from "../features/products/pages/Home"
-import ProductsDetails from "../features/products/pages/ProductsDetails"
 import AddToCartPage from "../features/products/pages/addToCartPage"
 import CheckOut from "../features/products/pages/CheckOut"
+import SellerProductDetails from "../features/products/pages/SellerProductDetails"
+import SellerDashboard from "../features/products/pages/SellerProductDetails"
+import Home from "../features/products/pages/Home"
+import ProductsDetails from "../features/products/pages/ProductsDetails"
 
 
 
@@ -42,20 +44,35 @@ export const router = createBrowserRouter([
     </ProtectedRoute>
   )
   },
-  {
-    path:"/products/:id",
-    element:<ProductsDetails/>
-  },
+  // {
+  //   path:"sellerDashboard",
+  //   element:(
+  //     <ProtectedRoute Role="seller">
+  //       <SellerDashboard/>
+  //     </ProtectedRoute>
+  //   )
+  // },
+  
   {
     path:"/addToCart",
     element:<AddToCartPage/>
   },
   {
     path:"/checkout",
-   element:<ProtectedRoute Role="buyer">
+   element:(<ProtectedRoute Role="buyer">
     <CheckOut/>
-   </ProtectedRoute>
+   </ProtectedRoute>)
   },
- 
+ {
+  path:"/seller/products/:id",
+  element:(<ProtectedRoute Role="seller">
+ <SellerProductDetails/>
+  </ProtectedRoute>)
+ },
+ {
+  path:"/products/:id",
+  element:<ProductsDetails/>
+ }
+
   
 ])

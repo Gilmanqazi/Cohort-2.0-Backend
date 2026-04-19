@@ -1,118 +1,160 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import { useProduct } from '../Hook/useProduct';
-import { motion } from 'framer-motion'; // Animation ke liye
-import { ChevronLeft, ShoppingCart, Star } from 'lucide-react'; // Icons
+import { motion, AnimatePresence } from 'framer-motion'; 
+import { ChevronLeft, ShoppingCart, Star, AlertCircle } from 'lucide-react';
 
 const ProductsDetails = () => {
   const { id } = useParams();
   const navigate = useNavigate();
   const { handleProductById } = useProduct();
-  
   const product = useSelector((state) => state.product.productById);
 
+  const [selectedAttributes, setSelectedAttributes] = useState({});
+  const [selectedVariant, setSelectedVariant] = useState(null);
+  const [activeImage, setActiveImage] = useState("");
+
   useEffect(() => {
-    if (id) {
-      handleProductById(id);
-    }
-    // Scroll to top on load
+    if (id) handleProductById(id);
     window.scrollTo(0, 0);
   }, [id]);
-    
-  // 1. Loading State UI (Skeleton)
-  if (!product || product?._id !== id) {
-    return (
-      <div className="min-h-screen flex items-center justify-center bg-white">
-        <div className="animate-pulse flex flex-col items-center">
-          <div className="w-64 h-64 bg-gray-200 rounded-xl mb-4"></div>
-          <div className="h-4 w-48 bg-gray-200 rounded mb-2"></div>
-          <div className="h-4 w-32 bg-gray-200 rounded"></div>
-        </div>
-      </div>
-    );
-  }
+
+  useEffect(() => {
+    if (product && product._id === id) {
+      setActiveImage(product.images[0]?.url);
+      setSelectedVariant(null);
+      setSelectedAttributes({});
+    }
+  }, [product, id]);
+
+  const getDynamicAttributes = () => {
+    const attrMap = {};
+    product?.varients?.forEach(v => {
+      console.log(v,"VVVVV")
+      if (v.attribute) {
+        Object.entries(v.attribute).forEach(([key, value]) => {
+          if (!attrMap[key]) attrMap[key] = new Set();
+          attrMap[key].add(value);
+        });
+      }
+    });
+    const finalAttrs = {};
+    for (const key in attrMap) {
+      finalAttrs[key] = Array.from(attrMap[key]);
+    }
+    return finalAttrs;
+  };
+
+  const availableAttributes = getDynamicAttributes();
+
+  useEffect(() => {
+    if (Object.keys(selectedAttributes).length > 0) {
+      const match = product?.varients?.find(v => 
+        Object.entries(selectedAttributes).every(([key, value]) => v.attribute[key] === value)
+      );
+      if (match) {
+        setSelectedVariant(match);
+        setActiveImage(match.images[0].url || product.images[0]?.url);
+      } else {
+        setSelectedVariant(null);
+      }
+    }
+  }, [selectedAttributes, product]);
+
+  // --- Naya Function: Photo click karne par attributes auto-select ho jayein ---
+  const handleVariantPhotoClick = (v) => {
+    setSelectedVariant(v);
+    setActiveImage(v.images[0]?.url|| product.images[0]?.url);
+    if (v.attribute) {
+      setSelectedAttributes(v.attribute); // Isse buttons bhi apne aap highlight ho jayenge
+    }
+  };
+
+  if (!product || product?._id !== id) return <div className="min-h-screen bg-[#05070a]" />;
 
   return (
-    <div className="min-h-screen bg-gray-50 py-12 px-4 sm:px-6 lg:px-8 font-sans">
+    <div className="min-h-screen bg-[#05070a] text-slate-200 py-12 px-4">
       <div className="max-w-7xl mx-auto">
         
-        {/* Back Button */}
-        <button 
-          onClick={() => navigate(-1)}
-          className="flex items-center text-gray-600 hover:text-black transition-colors mb-8 group"
-        >
-          <ChevronLeft className="w-5 h-5 group-hover:-translate-x-1 transition-transform" />
-          <span className="ml-1 font-medium">Back to products</span>
-        </button>
-
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 bg-white rounded-3xl p-8 shadow-sm border border-gray-100">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 bg-[#0d1117] rounded-[3rem] p-8 border border-white/5">
           
-          {/* Left: Image Section */}
-          <motion.div 
-            initial={{ opacity: 0, x: -20 }}
-            animate={{ opacity: 1, x: 0 }}
-            className="relative group bg-gray-50 rounded-2xl overflow-hidden flex items-center justify-center p-8"
-          >
-            <img
-              src={product?.images?.[0]?.url || "https://via.placeholder.com/600"}
-              alt={product?.title}
-              className="max-h-[500px] object-contain mix-blend-multiply transition-transform duration-500 group-hover:scale-105"
-            />
-          </motion.div>
+          {/* LEFT: Image & Thumbnails */}
+          <div className="flex flex-col gap-8">
+            <motion.div 
+              key={activeImage}
+              initial={{ opacity: 0 }} animate={{ opacity: 1 }}
+              className="aspect-square bg-[#161b22] rounded-[2rem] overflow-hidden flex items-center justify-center p-12 border border-white/5"
+            >
+              <img src={activeImage} className="max-h-full object-contain" />
+            </motion.div>
 
-          {/* Right: Content Section */}
-          <motion.div 
-            initial={{ opacity: 0, x: 20 }}
-            animate={{ opacity: 1, x: 0 }}
-            className="flex flex-col justify-center"
-          >
-            <div className="mb-4">
-              <span className="text-blue-600 text-sm font-bold uppercase tracking-widest">New Arrival</span>
-              <h1 className="text-4xl font-extrabold text-gray-900 mt-2 mb-4 leading-tight">
-                {product?.title}
-              </h1>
-              
-              <div className="flex items-center gap-4 mb-6">
-                <span className="text-3xl font-light text-gray-900">
-                  {product?.price?.currency || '$'} {product?.price?.amount}
-                </span>
-                <div className="flex items-center bg-green-50 px-2 py-1 rounded text-green-700 text-sm font-medium">
-                  <Star className="w-4 h-4 fill-current mr-1" />
-                  4.8
+            {/* --- VARIENTS IMAGES LIST (Jo missing thi) --- */}
+            {product.varients?.length > 0 && (
+              <div className="space-y-4">
+                <h3 className="text-[10px] font-black text-slate-500 uppercase tracking-widest">Visual Variants</h3>
+                <div className="flex gap-4 overflow-x-auto pb-2 no-scrollbar">
+                  {/* Original Product Photo */}
+                  <div 
+                    onClick={() => { setSelectedVariant(null); setSelectedAttributes({}); setActiveImage(product.images[0]?.url); }}
+                    className={`min-w-[80px] h-24 rounded-2xl overflow-hidden cursor-pointer border-2 transition-all p-1 ${!selectedVariant ? 'border-cyan-500 bg-cyan-500/10' : 'border-transparent bg-white/5 opacity-40'}`}
+                  >
+                    <img src={product.images[0]?.url} className="w-full h-full object-cover rounded-xl" />
+                  </div>
+
+                  {/* All Other Variants Photos */}
+                  {product.varients.map((v, i) => (
+                    <div 
+                      key={v._id || i}
+                      onClick={() => handleVariantPhotoClick(v)}
+                      className={`min-w-[80px] h-24 rounded-2xl overflow-hidden cursor-pointer border-2 transition-all p-1 ${selectedVariant?._id === v._id ? 'border-cyan-500 bg-cyan-500/10' : 'border-transparent bg-white/5 opacity-40'}`}
+                    >
+                      <img src={v.images[0]?.url } className="w-full h-full object-cover rounded-xl" />
+                    </div>
+                  ))}
                 </div>
               </div>
+            )}
+          </div>
 
-              <div className="h-px bg-gray-100 w-full mb-6"></div>
-
-              <p className="text-gray-600 leading-relaxed mb-8 text-lg">
-                {product?.description || "No description available for this premium product."}
-              </p>
+          {/* RIGHT: Attributes & Info */}
+          <div className="flex flex-col">
+            <h1 className="text-4xl font-black text-white mb-4 italic tracking-tighter">{product.title}</h1>
+            
+            <div className="text-3xl font-mono font-bold text-cyan-400 mb-8">
+              ₹{selectedVariant ? selectedVariant.price.amount : product.price.amount}
+              
             </div>
 
-            {/* Actions */}
-            <div className="flex flex-col sm:flex-row gap-4">
-              <button className="flex-1 bg-black text-white px-8 py-4 rounded-xl font-semibold hover:bg-gray-800 transition-all flex items-center justify-center gap-2 active:scale-95">
-                <ShoppingCart className="w-5 h-5" />
-                Add to Cart
-              </button>
-              <button className="flex-1 bg-white text-black border-2 border-gray-200 px-8 py-4 rounded-xl font-semibold hover:border-black transition-all active:scale-95">
-                Wishlist
-              </button>
+            {/* Dynamic Buttons (Color, Edition, etc.) */}
+            <div className="space-y-8 mb-10">
+              {Object.entries(availableAttributes).map(([attrKey, values]) => (
+                
+           
+                <div key={attrKey}>
+                  <p className="text-[10px] font-black uppercase text-slate-500 mb-4 tracking-widest">{attrKey}</p>
+                  <div className="flex flex-wrap gap-2">
+                    {values.map((val) => (  
+                         console.log(val,"ATTRRKEYY"),
+                      <button
+                        key={val}
+                        onClick={() => setSelectedAttributes(prev => ({ ...prev, [attrKey]: val }))}
+                        className={`px-4 py-2 rounded-xl border-2 text-[10px] font-bold uppercase transition-all ${
+                          selectedAttributes[attrKey] === val ? 'bg-white border-white text-black' : 'bg-transparent border-white/10 text-slate-400 hover:border-white/30'
+                        }`}
+                      >
+                        {val}
+                     </button>
+                    ))}
+                  </div>
+                </div>
+              ))}
             </div>
 
-            {/* Minimal Details */}
-            <div className="mt-10 grid grid-cols-2 gap-4 border-t border-gray-100 pt-8">
-              <div>
-                <h4 className="text-xs font-bold text-gray-400 uppercase tracking-tighter">Fast Delivery</h4>
-                <p className="text-sm text-gray-700 mt-1">2-4 Business Days</p>
-              </div>
-              <div>
-                <h4 className="text-xs font-bold text-gray-400 uppercase tracking-tighter">Returns</h4>
-                <p className="text-sm text-gray-700 mt-1">30-day policy</p>
-              </div>
-            </div>
-          </motion.div>
+            <button className="w-full py-5 bg-cyan-600 text-black font-black uppercase tracking-[0.3em] rounded-2xl hover:bg-white transition-all">
+              {selectedVariant?.stock <= 0 ? "Out of Stock" : "Add to Vault"}
+            </button>
+          </div>
 
         </div>
       </div>

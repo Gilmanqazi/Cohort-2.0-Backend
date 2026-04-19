@@ -2,20 +2,25 @@ import React, { useEffect } from 'react';
 import { useProduct } from '../Hook/useProduct';
 import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
+import { useAuth } from '../../auth/hook/useAuth';
 
 const AddToCartPage = () => {
 
   const navigate = useNavigate()
 
   const getAllCart = useSelector((state) => state.product.getCartUser);
+  const user = useSelector((state)=> state.auth.user)
+
+  console.log(user,getAllCart,"USERRRR")
 
 
   
   const { handleGetAddToCart } = useProduct();
+  const {handleLogin} = useAuth()
 
   useEffect(() => {
     handleGetAddToCart();
-  
+  handleLogin()
   }, []);
 
   // Total Price calculation

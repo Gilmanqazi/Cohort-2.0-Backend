@@ -1,4 +1,4 @@
-import { addToCart, createProducts,getAddToCart,getAllProducts,getProductById,getSellerProducts } from "../services/product.api";
+import { addProductVariants, addToCart, createProducts,getAddToCart,getAllProducts,getProductById,getSellerProducts } from "../services/product.api";
 import { setAddToCart, setGetCartUser, setProductById, setProducts, setSellerProducts } from "../state/product.slice";
 import {useDispatch} from "react-redux"
 
@@ -67,8 +67,17 @@ const handleGetAddToCart = async ()=>{
   }
 }
 
+const handleAddProductVariant = async (productId,newProductVariant)=>{
+
+  const data = await addProductVariants(productId,newProductVariant)
+
+  console.log(data)
+  return data
+
+}
 
 
 
-return {handleSelectProducts,handleGetSellerProducts,handleGetAllProducts,handleProductById,handleAddToCart,handleGetAddToCart}
+
+return {handleSelectProducts,handleGetSellerProducts,handleGetAllProducts,handleProductById,handleAddToCart,handleGetAddToCart,handleAddProductVariant}
 }

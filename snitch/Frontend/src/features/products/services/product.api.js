@@ -71,3 +71,21 @@ export const getAddToCart = async () =>{
   }
 }
 
+
+export const addProductVariants = async (productId,newProductVariant) =>{
+
+  const formData = new FormData()
+
+  newProductVariant.images.forEach((Image)=>{
+    formData.append("images",Image.file)
+  })
+
+  formData.append("stock",newProductVariant.stock)
+  formData.append("priceAmount",newProductVariant.price)
+  formData.append("attributes",JSON.stringify(newProductVariant.attributes))
+
+  const res = await api.post(`/${productId}/add-Varints`,formData)
+  console.log(res.data)
+  return res.data
+
+}

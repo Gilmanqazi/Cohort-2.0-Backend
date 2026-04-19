@@ -5,26 +5,31 @@ import { FcGoogle } from 'react-icons/fc';
 import modelLogin from "../../../assets/Model-Snitch-Login.jpeg"
 import { toast } from 'react-toastify';
 import { useNavigate } from 'react-router-dom';
-import { useLocation } from 'react-router-dom';
+// import { useLocation } from 'react-router-dom';
 
 const Login = () => {
 const navigate = useNavigate()
-const location = useLocation()
-const from = location?.state?.from?.pathname || "/"
+// const location = useLocation()
+// const from = location?.state?.from?.pathname || "/"
+
+// console.log(from,"FROMMM")
   const { handleLogin } = useAuth();
   const { register, reset, handleSubmit, formState: { errors } } = useForm();
 
   const onSubmit = async (data) => {
     const user = await handleLogin(data);
-  navigate(from ,{replace:true})
-    if(user.role == "buyer"){
-navigate("/")
-    }else if(user.role == "seller"){
-      navigate("/getProduct")
+    
+    if (user) {
+      toast.success("Login Successful");
+      reset();
     }
-    reset();
-   toast.success("Login Successfull")
-     navigate("/")
+  
+    if(user.role === "buyer"){
+      navigate("/")
+    }else if(user.role === "seller"){
+      navigate( "/getProducts")
+    }
+  
   };
 
   return (
