@@ -1,8 +1,8 @@
 import axios from "axios"
 
 const api = axios.create({
-  baseURL:"/api/products",
-  withCredentials:true
+  baseURL: `${import.meta.env.VITE_API_URL}/api/products`,
+  withCredentials: true
 })
 
 
