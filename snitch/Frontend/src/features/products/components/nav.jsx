@@ -2,12 +2,16 @@ import React from 'react';
 import { useSelector } from 'react-redux';
 import { useNavigate, useLocation } from "react-router-dom";
 import { motion } from "framer-motion";
-import { ShoppingBag, User, Menu } from "lucide-react";
+import { ShoppingBag, User, Menu, LogIn } from "lucide-react";
 import SearchBar from './SearchBar';
 
 const Nav = () => {
   const navigate = useNavigate();
   const location = useLocation();
+  
+  // Maan lete hain ki auth state aapke redux mein hai
+  // Agar nahi hai toh aap ise apne logic ke hisaab se check kar sakte hain
+  const user = useSelector((state) => state.auth?.user || null); 
   const cart = useSelector((state) => state.product.addToCard);
   const count = cart?.cart?.items?.length || 0;
 
@@ -30,7 +34,6 @@ const Nav = () => {
             <div className="w-9 h-9 bg-white text-black flex items-center justify-center font-black text-sm rounded-sm group-hover:bg-emerald-500 transition-colors duration-500">
               V
             </div>
-            {/* Subtle Neon Dot */}
             <div className="absolute -bottom-1 -right-1 w-2.5 h-2.5 bg-emerald-500 rounded-full border-2 border-[#05070a] shadow-[0_0_8px_#06b6d4]" />
           </div>
           
@@ -39,13 +42,13 @@ const Nav = () => {
           </h1>
         </div>
 
-        {/* --- Center Search (Modern Integration) --- */}
+        {/* --- Center Search --- */}
         <div className="hidden lg:block w-full max-w-md mx-8">
           <SearchBar />
         </div>
 
         {/* --- Right Actions --- */}
-        <div className="flex items-center gap-6 md:gap-10">
+        <div className="flex items-center gap-6 md:gap-8">
           
           {/* Desktop Links */}
           <div className="hidden md:flex gap-8 text-[10px] uppercase tracking-[0.25em] font-black text-slate-500">
@@ -68,11 +71,11 @@ const Nav = () => {
           <div className="flex items-center gap-4 border-l border-white/10 pl-6">
             {/* Cart Icon */}
             <div 
-              className="relative group cursor-pointer" 
+              className="relative group cursor-pointer mr-2" 
               onClick={() => navigate("/addToCart")}
             >
               <div className="p-2.5 group-hover:bg-white/5 rounded-full transition-all duration-300">
-                <ShoppingBag size={20} strokeWidth={1.5} className="text-slate-300 group-hover:text-emerald-400" />
+                <ShoppingBag size={18} strokeWidth={1.5} className="text-slate-300 group-hover:text-emerald-400" />
               </div>
               
               {count > 0 && (
@@ -86,14 +89,43 @@ const Nav = () => {
               )}
             </div>
 
-            {/* Profile/Menu (Mobile Friendly) */}
-            <div className="p-2.5 hover:bg-white/5 rounded-full cursor-pointer transition-all md:hidden">
-              <Menu size={20} strokeWidth={1.5} className="text-slate-300" />
+            {/* --- Auth Buttons Section --- */}
+            {!user ? (
+              <div className="hidden md:flex items-center gap-3">
+                <button 
+                  onClick={() => navigate("/login")}
+                  className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400 hover:text-white transition-all px-4 py-2"
+                >
+                  Log_In
+                </button>
+                <button 
+                  onClick={() => navigate("/register")}
+                  className="text-[10px] font-black uppercase tracking-[0.2em] bg-white text-black px-5 py-2.5 rounded-sm hover:bg-emerald-500 transition-all shadow-[0_0_15px_rgba(255,255,255,0.05)]"
+                >
+                  Join_Club
+                </button>
+              </div>
+            ) : (
+              <div 
+                className="hidden md:block p-2.5 hover:bg-white/5 rounded-full cursor-pointer transition-all border border-white/5"
+                onClick={() => navigate("/profile")}
+              >
+                <User size={18} strokeWidth={1.5} className="text-slate-300 hover:text-white" />
+              </div>
+            )}
+
+            {/* Mobile Menu / Auth Icon */}
+            <div className="flex md:hidden items-center gap-2">
+              {!user && (
+                 <div onClick={() => navigate("/login")} className="p-2 text-slate-300">
+                    <LogIn size={20} strokeWidth={1.5} />
+                 </div>
+              )}
+              <div className="p-2 hover:bg-white/5 rounded-full cursor-pointer transition-all">
+                <Menu size={20} strokeWidth={1.5} className="text-slate-300" />
+              </div>
             </div>
-            
-            <div className="hidden md:block p-2.5 hover:bg-white/5 rounded-full cursor-pointer transition-all">
-              <User size={20} strokeWidth={1.5} className="text-slate-300 hover:text-white" />
-            </div>
+
           </div>
         </div>
       </div>
