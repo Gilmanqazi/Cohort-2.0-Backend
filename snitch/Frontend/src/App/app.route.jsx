@@ -4,12 +4,13 @@ import Login from "../features/auth/pages/Login"
 import CreateProduct from "../features/products/pages/CreateProducts"
 import GetSellerProducts from "../features/products/pages/GetSellerProducts"
 import ProtectedRoute from "../features/protectedRoute"
-import AddToCartPage from "../features/products/pages/addToCartPage"
+import AddToCartPage from "../features/products/cart/pages/AddToCartPage"
 import CheckOut from "../features/products/pages/CheckOut"
 import SellerProductDetails from "../features/products/pages/SellerProductDetails"
-import SellerDashboard from "../features/products/pages/SellerProductDetails"
+// import SellerDashboard from "../features/products/pages/SellerProductDetails"
 import Home from "../features/products/pages/Home"
 import ProductsDetails from "../features/products/pages/ProductsDetails"
+import NotFound from "../features/products/components/NotFound"
 
 
 
@@ -44,15 +45,7 @@ export const router = createBrowserRouter([
     </ProtectedRoute>
   )
   },
-  // {
-  //   path:"sellerDashboard",
-  //   element:(
-  //     <ProtectedRoute Role="seller">
-  //       <SellerDashboard/>
-  //     </ProtectedRoute>
-  //   )
-  // },
-  
+ 
   {
     path:"/addToCart",
     element:<AddToCartPage/>
@@ -72,6 +65,10 @@ export const router = createBrowserRouter([
  {
   path:"/products/:id",
   element:<ProductsDetails/>
+ },
+ {
+  path:"*",
+  element:<NotFound/>
  }
 
   

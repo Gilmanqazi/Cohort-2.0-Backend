@@ -2,145 +2,142 @@ import React, { useEffect } from 'react'
 import { useProduct } from '../Hook/useProduct'
 import { useNavigate } from 'react-router-dom'
 import { useSelector } from 'react-redux'
-import SellerDashboard from './SellerProductDetails'
+import { motion } from 'framer-motion'
+import { Trash2, Plus, Package, Layers } from 'lucide-react'
 
 const GetSellerProducts = () => {
   const navigate = useNavigate()
-  const { handleGetSellerProducts } = useProduct()
+  const { handleGetSellerProducts, handleDeleteProduct } = useProduct()
   const products = useSelector((state) => state.product.sellerProduct)
-  console.log(products)
 
   useEffect(() => {
-    fetchData()
+    handleGetSellerProducts()
   }, [])
 
-  const fetchData = async () => {
-    await handleGetSellerProducts()
+  const onDeleteClick = async (id) => {
+    if (window.confirm('Delete this product permanently?')) {
+      await handleDeleteProduct(id)
+      handleGetSellerProducts()
+    }
   }
 
   return (
-    <div className="min-h-screen bg-[#f8fafc] pb-20">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-10 py-10">
-        
+    <div className="min-h-screen bg-[#050505] text-white p-4 md:p-10 font-sans antialiased">
+      <div className="max-w-7xl mx-auto">
+
         {/* Header Section */}
-        <div className="mb-12 flex flex-col md:flex-row md:items-center justify-between gap-4">
+        <header className="flex flex-col md:flex-row justify-between items-start md:items-center mb-12 gap-6">
           <div>
-            <h1 className="text-3xl font-black tracking-tight text-slate-900 uppercase italic">
-              Inventory <span className="text-cyan-600">Control</span>
+            <h1 className="text-3xl font-light tracking-[0.2em] uppercase mb-2">
+              Inventory <span className="font-bold">Studio</span>
             </h1>
-            <p className="text-sm text-slate-500 font-medium">
-              Manage your master products and their associated variants.
+            <p className="text-xs text-zinc-500 tracking-widest uppercase flex items-center gap-2">
+              <Package size={14} /> Curate and manage your elite collection
             </p>
           </div>
-          <button 
+
+          <button
             onClick={() => navigate('/createProduct')}
-            className="bg-slate-900 text-white px-6 py-3 rounded-xl text-xs font-black uppercase tracking-widest hover:bg-cyan-600 transition-all shadow-lg active:scale-95"
+            className="flex items-center gap-3 bg-white text-black px-8 py-4 rounded-full text-[11px] font-black uppercase tracking-[0.2em] hover:bg-zinc-200 transition-all active:scale-95 shadow-xl shadow-white/5"
           >
-            + Create New Product
+            <Plus size={16} /> Add Product
           </button>
-        </div>
+        </header>
 
-        {/* Products Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
-          {products && products.length > 0 ? (
-            products.map((item) => {
-              const mainImageUrl =
-                typeof item.images?.[0] === "string"
-                  ? item.images[0]
-                  : item.images?.[0]?.url;
+        {/* Dashboard Grid */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+          {products?.map((item) => {
+            const img = item.images?.[0]?.url || item.images?.[0]
 
-              return (
-                <div key={item._id} className="flex flex-col gap-4">
+            return (
+              <motion.div
+                key={item._id}
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                className="bg-[#0A0A0A] rounded-2xl overflow-hidden border border-white/5 hover:border-white/20 transition-all duration-500 group"
+              >
+                {/* Image Section */}
+                <div className="relative h-64 overflow-hidden">
+                  <img 
+                    src={img} 
+                    className="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-700 group-hover:scale-110" 
+                    alt={item.title}
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-[#0A0A0A] to-transparent opacity-60"></div>
                   
-                  {/* --- Main Product Card --- */}
-                  <div className="bg-white rounded-[2rem] overflow-hidden border border-slate-200 shadow-sm group hover:border-cyan-500/50 transition-all duration-300">
-                    <div className="relative aspect-[4/3] bg-slate-100 overflow-hidden">
-                      <img 
-                        src={mainImageUrl || "https://via.placeholder.com/400"} 
-                        alt={item.title}
-                        className="w-full h-full object-cover group-hover:scale-105 transition duration-700"
-                      />
-                      <div className="absolute top-4 left-4 bg-white/90 backdrop-blur px-3 py-1 rounded-full text-[10px] font-bold shadow-sm">
-                        MASTER ID: {item._id.slice(-6).toUpperCase()}
-                      </div>
-                    </div>
+                  <button
+                    onClick={() => onDeleteClick(item._id)}
+                    className="absolute top-4 right-4 bg-black/60 backdrop-blur-md p-3 rounded-full text-zinc-400 hover:text-red-500 border border-white/10 transition-colors"
+                  >
+                    <Trash2 size={18} />
+                  </button>
+                </div>
 
-                    <div className="p-6">
-                      <div className="flex justify-between items-start mb-2">
-                        <h2 className="text-lg font-bold text-slate-900 truncate pr-4">
-                          {item.title}
-                        </h2>
-                        <span className="text-cyan-600 font-black">
-                          ₹{item.price.amount}
-                        </span>
-                      </div>
-                      <p className="text-xs text-slate-500 line-clamp-2 mb-4 leading-relaxed font-medium">
-                        {item.description}
-                      </p>
-                      
-                      <button 
-                         onClick={() => navigate(`/seller/products/${item._id}`)}
-                         className="w-full py-2.5 border-2 border-dashed border-slate-200 rounded-xl text-[10px] font-bold uppercase tracking-widest text-slate-400 hover:border-cyan-500 hover:text-cyan-600 transition-all"
-                      >
-                         + Add Variant to this product
-                      </button>
-                    </div>
+                {/* Content Section */}
+                <div className="p-6">
+                  <div className="flex justify-between items-start mb-3">
+                    <h2 className="font-medium text-lg tracking-tight truncate pr-4 uppercase">
+                      {item.title}
+                    </h2>
+                    <span className="font-black text-white tracking-tighter">
+                      ₹{item.price.amount.toLocaleString()}
+                    </span>
                   </div>
 
-                  {/* --- Variants Gallery (Jo aap dekhna chahte hain) --- */}
-                  <div className="px-2">
-                    <h3 className="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] mb-3 flex items-center gap-2">
-                      <div className="h-[1px] w-4 bg-slate-300" />
-                      Active Variants ({item.varients?.length || 0})
-                    </h3>
+                  <p className="text-[11px] text-zinc-500 leading-relaxed line-clamp-2 uppercase tracking-wider mb-6">
+                    {item.description}
+                  </p>
 
-                    <div className="flex gap-3 overflow-x-auto pb-4 no-scrollbar">
-                      {item.varients && item.varients.length > 0 ? (
-                        item.varients.map((v, i) => (
-                          console.log(v.images[0]?.url,"VVV"),
-                          <div 
-                            key={v._id || i}
-                            className="min-w-[120px] bg-white border border-slate-200 rounded-2xl p-2 shadow-sm flex flex-col gap-2 hover:shadow-md transition"
-                          >
-                            <div className="h-20 w-full bg-slate-50 rounded-xl overflow-hidden">
-                              <img 
-                                src={v.images[0]?.url } 
-                                className="w-full h-full object-cover"
-                                alt="variant"
-                              />
-                            </div>
-                            <div className="px-1">
-                              <p className="text-[10px] font-black text-slate-800 tracking-tighter">
-                                ₹{v.price?.amount || item.price.amount}
-                              </p>
-                              <div className="flex justify-between items-center mt-1">
-                                <span className="text-[8px] font-bold text-slate-400 uppercase">Stock: {v.stock || 0}</span>
-                                <div className="w-2 h-2 rounded-full bg-green-500" />
-                              </div>
-                            </div>
+                  <button
+                    onClick={() => navigate(`/seller/products/${item._id}`)}
+                    className="w-full bg-transparent border border-zinc-800 text-zinc-400 py-3 rounded-xl text-[10px] font-bold uppercase tracking-[0.2em] hover:bg-white hover:text-black hover:border-white transition-all duration-300"
+                  >
+                    Manage Variants
+                  </button>
+                </div>
+
+                {/* Variants Preview Footer */}
+                <div className="bg-white/[0.02] border-t border-white/5 p-5">
+                  <div className="flex justify-between text-[10px] uppercase tracking-widest text-zinc-600 mb-4 font-bold">
+                    <span className="flex items-center gap-2"><Layers size={12}/> Editions</span>
+                    <span>{item.varients?.length || 0} Total</span>
+                  </div>
+
+                  <div className="flex gap-4 overflow-x-auto pb-2 no-scrollbar">
+                    {item.varients?.length > 0 ? (
+                      item.varients.map((v) => (
+                        <div key={v._id} className="min-w-[100px] flex flex-col gap-2">
+                          <div className="h-20 w-full rounded-lg overflow-hidden border border-white/5 bg-zinc-900">
+                            <img
+                              src={v.images?.[0]?.url}
+                              className="h-full w-full object-cover grayscale opacity-60"
+                            />
                           </div>
-                        ))
-                      ) : (
-                        <div className="w-full py-4 px-6 bg-slate-100 rounded-2xl border border-dashed border-slate-200">
-                           <p className="text-[10px] text-slate-400 font-medium italic text-center">
-                             No variants found. Start adding colors or sizes!
-                           </p>
+                          <div className="flex flex-col">
+                            <span className="text-[10px] font-bold tracking-tighter">₹{v.price?.amount}</span>
+                            <span className="text-[8px] text-zinc-600 uppercase">Stock: {v.stock}</span>
+                          </div>
                         </div>
-                      )}
-                    </div>
+                      ))
+                    ) : (
+                      <p className="text-[10px] text-zinc-700 uppercase tracking-widest py-2">No variants curated</p>
+                    )}
                   </div>
                 </div>
-              );
-            })
-          ) : (
-            <div className="col-span-full py-40 text-center">
-              <div className="w-12 h-12 border-4 border-cyan-500 border-t-transparent rounded-full animate-spin mx-auto mb-4" />
-              <p className="text-xs font-bold text-slate-400 uppercase tracking-widest">
-                Loading Your Warehouse...
-              </p>
-            </div>
-          )}
+              </motion.div>
+            )
+          })}
         </div>
+
+        {/* Empty State */}
+        {products?.length === 0 && (
+          <div className="h-[50vh] flex flex-col justify-center items-center text-center">
+            <div className="w-20 h-[1px] bg-zinc-800 mb-8"></div>
+            <h2 className="text-xl font-extralight tracking-[0.3em] text-zinc-500 uppercase">Archive Empty</h2>
+            <p className="text-[10px] text-zinc-700 tracking-widest uppercase mt-2">Start by adding your first masterpiece</p>
+          </div>
+        )}
+
       </div>
     </div>
   )

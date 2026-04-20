@@ -1,5 +1,6 @@
-import { addProductVariants, addToCart, createProducts,getAddToCart,getAllProducts,getProductById,getSellerProducts } from "../services/product.api";
-import { setAddToCart, setGetCartUser, setProductById, setProducts, setSellerProducts } from "../state/product.slice";
+import { toast } from "react-toastify";
+import { addProductVariants,  createProducts,deleteProductService,getAllProducts,getProductById,getSearchProduct,getSellerProducts } from "../services/product.api";
+import {  clearSearch, setDeleteProduct,  setProductById, setProducts, setSearchLoading, setSearchResults, setSellerProducts } from "../state/product.slice";
 import {useDispatch} from "react-redux"
 
 
@@ -11,17 +12,25 @@ const handleSelectProducts = async (formData) =>{
 
 try {
   const data = await createProducts(formData)
+  toast.success("Product Created")
   return data.products
 } catch (error) {
+  const msg = error?.response?.data?.message
+  toast.error(msg)
   console.log(error)
 }
 
 }
 
 const handleGetSellerProducts = async()=>{
+ try {
   const data = await getSellerProducts()
   dispatch(setSellerProducts(data.products))
   return data.products
+ } catch (error) {
+const msg = error?.response?.data?.message
+  toast.error(msg)
+ }
 }
 
 const handleGetAllProducts = async ()=>{
@@ -32,52 +41,69 @@ const handleGetAllProducts = async ()=>{
 
 const handleProductById = async (id)=>{
 try {
-  console.log(id,"IDIDIDI")
+
   const data  = await getProductById(id)
-console.log(data.products,"DATATA")
+
   dispatch(setProductById(data.products))
   return data.products
 } catch (error) {
-  console.log(error,"ERRRRRR")
+  const msg = error?.response?.data?.message
+toast.error(msg)
 }
-}
-
-const handleAddToCart = async (productId) =>{
-  try {
-    const data = await addToCart(productId)
-    console.log("Success:", data);
-   dispatch(setAddToCart(data))
-    return data
-
-  } catch (error) {
-    console.log(error)
-    throw error
-  }
-}
-
-const handleGetAddToCart = async ()=>{
-  try {
-    const data = await getAddToCart()
-    console.log(data,"DATATATATA")
-    dispatch(setGetCartUser(data.getCarts))
-    return data.getCarts
-  } catch (error) {
-    console.log(error)
-    throw error
-  }
 }
 
 const handleAddProductVariant = async (productId,newProductVariant)=>{
 
-  const data = await addProductVariants(productId,newProductVariant)
-
-  console.log(data)
+  try {
+    const data = await addProductVariants(productId,newProductVariant)
+toast.success("Variants Added ")
   return data
+  } catch (error) {
+  const msg = error?.response?.data?.message
+  toast.error(msg)
+  }
+}
 
+const handleDeleteProduct = async (productId) =>{
+  try {
+    const data = await deleteProductService(productId)
+ 
+
+    if (data.success) {
+      dispatch(setDeleteProduct(productId)); 
+toast.error("Product Deleted ")
+    }
+
+    return data;
+  } catch (error) {
+  const msg = error?.response?.data?.message
+  toast.error(msg)
+    throw error
+  }
+}
+
+const handleSearch = async (query)=>{
+if(!query || query.length<2){
+  dispatch(clearSearch())
+  return
+}
+
+dispatch(setSearchLoading(true))
+
+try {
+  const data = await getSearchProduct(query)
+  if(data.success){
+    dispatch(setSearchResults(data.products))
+  }
+} catch (error) {
+  console.error("Search Error:", error);
+}finally{
+  dispatch(setSearchLoading(false))
+}
 }
 
 
 
 
-return {handleSelectProducts,handleGetSellerProducts,handleGetAllProducts,handleProductById,handleAddToCart,handleGetAddToCart,handleAddProductVariant}
+return {handleSelectProducts,handleGetSellerProducts,handleGetAllProducts,handleProductById,handleAddProductVariant,handleDeleteProduct,handleSearch}
 }

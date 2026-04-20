@@ -6,8 +6,9 @@ export const productSlice = createSlice({
     sellerProduct:[],
     products:[],
     productById:null,
-    addToCard:{},
-    getCartUser:[],
+    deleteProduct:[],
+    searchResults: [],
+    isSearchLoading: false
   },
   reducers:{
 
@@ -20,17 +21,28 @@ export const productSlice = createSlice({
     setProductById:(state,action)=>{
       state.productById = action.payload
     },
-    setAddToCart:(state,action)=>{
-      state.addToCard = action.payload
-    },
-    setGetCartUser:(state,action)=>{
-      state.getCartUser = action.payload.items
-    },
-   
+    setDeleteProduct: (state,action)=>{
+      state.deleteProduct = action.payload
 
+      const deletedId = action.payload.id || action.payload; 
 
+  state.sellerProduct = state.sellerProduct.filter(
+    (product) => product._id !== deletedId
+  );
+    },
+
+    setSearchResults: (state, action) => {
+      state.searchResults = action.payload;
+    },
+    setSearchLoading: (state, action) => {
+      state.isSearchLoading = action.payload;
+    },
+    clearSearch: (state) => {
+      state.searchResults = [];
+    }
+  
   }
 })
 
-export const {setSellerProducts,setProducts,setProductById,setAddToCart,setGetCartUser} = productSlice.actions
+export const {setSellerProducts,setProducts,setProductById,setAddToCart,setGetCartUser,setDeleteProduct,setSearchResults,setSearchLoading,clearSearch} = productSlice.actions
 export default productSlice.reducer

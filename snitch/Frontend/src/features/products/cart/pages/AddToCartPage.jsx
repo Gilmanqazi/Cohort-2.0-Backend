@@ -1,29 +1,25 @@
 import React, { useEffect } from 'react';
-import { useProduct } from '../Hook/useProduct';
 import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-import { useAuth } from '../../auth/hook/useAuth';
+import { useAuth } from '../../../auth/hook/useAuth';
+import { useCart } from '../Hook/userCart';
 
 const AddToCartPage = () => {
+  const navigate = useNavigate();
 
-  const navigate = useNavigate()
-
-  const getAllCart = useSelector((state) => state.product.getCartUser);
-  const user = useSelector((state)=> state.auth.user)
-
-  console.log(user,getAllCart,"USERRRR")
+  const getAllCart = useSelector((state) => state.cart.getCartUser);
 
 
-  
-  const { handleGetAddToCart } = useProduct();
-  const {handleLogin} = useAuth()
+
+  const { handleGetAddToCart, handleAddToCart } = useCart();
+  const { handleLogin } = useAuth();
 
   useEffect(() => {
     handleGetAddToCart();
-  handleLogin()
+    handleLogin();
   }, []);
 
-  // Total Price calculation
+
   const subtotal = getAllCart.reduce((acc, item) => {
     return acc + (item.productId?.price?.amount || 0) * item.quantity;
   }, 0);
@@ -36,14 +32,20 @@ const AddToCartPage = () => {
         {getAllCart.length === 0 ? (
           <div className="text-center py-20 bg-white rounded-2xl shadow-sm">
             <p className="text-gray-500 text-lg">Your cart is feeling a bit light.</p>
-            <button className="mt-4 text-cyan-600 font-semibold hover:underline">Continue Shopping</button>
+            <button className="mt-4 text-cyan-600 font-semibold hover:underline">
+              Continue Shopping
+            </button>
           </div>
         ) : (
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
             {/* Cart Items List */}
             <div className="lg:col-span-2 space-y-4">
               {getAllCart.map((item) => (
-                <div key={item._id} className="bg-white p-4 rounded-2xl shadow-sm flex items-center gap-6 border border-gray-100 hover:shadow-md transition-shadow">
+  
+                <div
+                  key={item._id}
+                  className="bg-white p-4 rounded-2xl shadow-sm flex items-center gap-6 border border-gray-100 hover:shadow-md transition-shadow"
+                >
                   {/* Product Image */}
                   <div className="w-24 h-24 flex-shrink-0 bg-gray-100 rounded-xl overflow-hidden">
                     <img
@@ -56,11 +58,32 @@ const AddToCartPage = () => {
                   {/* Product Details */}
                   <div className="flex-1">
                     <h3 className="text-lg font-bold text-gray-800">{item?.productId?.title}</h3>
-                    <p className="text-sm text-gray-500 line-clamp-1">{item?.productId?.description}</p>
+                    <p className="text-sm text-gray-500 line-clamp-1">
+                      {item?.productId?.description}
+                    </p>
                     <div className="mt-2 flex items-center justify-between">
-                      <div className="flex items-center gap-4 bg-gray-50 px-3 py-1 rounded-lg border border-gray-200">
-                        <span className="text-sm font-medium text-gray-600">Qty: {item.quantity}</span>
+                      
+                      {/* Quantity Controls - Yahan changes kiye hain */}
+                      <div className="flex items-center gap-3 bg-gray-50 px-2 py-1 rounded-lg border border-gray-200">
+                        <button
+                          onClick={() => handleAddToCart(item.productId._id, item.quantity, "dec")}
+                          className="w-8 h-8 flex items-center justify-center font-bold text-gray-600 hover:text-red-500 transition-colors"
+                        >
+                          −
+                        </button>
+                        
+                        <span className="text-sm font-bold text-gray-700 w-4 text-center">
+                          {item.quantity}
+                        </span>
+                        
+                        <button
+                          onClick={() => handleAddToCart(item.productId._id, item.quantity, "inc")}
+                          className="w-8 h-8 flex items-center justify-center font-bold text-gray-600 hover:text-cyan-600 transition-colors"
+                        >
+                          +
+                        </button>
                       </div>
+
                       <p className="font-bold text-lg text-slate-900">
                         {item?.productId?.price?.currency} {item?.productId?.price?.amount}
                       </p>
@@ -76,7 +99,9 @@ const AddToCartPage = () => {
               <div className="space-y-3 border-b pb-4">
                 <div className="flex justify-between text-gray-600">
                   <span>Subtotal</span>
-                  <span>{getAllCart[0]?.productId?.price?.currency} {subtotal.toFixed(2)}</span>
+                  <span>
+                    {getAllCart[0]?.productId?.price?.currency} {subtotal.toFixed(2)}
+                  </span>
                 </div>
                 <div className="flex justify-between text-gray-600">
                   <span>Shipping</span>
@@ -89,7 +114,12 @@ const AddToCartPage = () => {
                   {getAllCart[0]?.productId?.price?.currency} {subtotal.toFixed(2)}
                 </span>
               </div>
-              <button onClick={()=>{navigate("/checkout")}} className="w-full py-4 bg-slate-800 hover:bg-slate-900 text-white rounded-xl font-bold transition-all transform active:scale-95 shadow-lg shadow-slate-200">
+              <button
+                onClick={() => {
+                  navigate("/checkout");
+                }}
+                className="w-full py-4 bg-slate-800 hover:bg-slate-900 text-white rounded-xl font-bold transition-all transform active:scale-95 shadow-lg shadow-slate-200"
+              >
                 Proceed to Checkout
               </button>
             </div>

@@ -3,13 +3,16 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import { useProduct } from '../Hook/useProduct';
 import { motion, AnimatePresence } from 'framer-motion'; 
-import { ChevronLeft, ShoppingCart, Star, AlertCircle } from 'lucide-react';
+import { useCart } from '../cart/Hook/userCart';
+import Nav from "../components/nav"
 
 const ProductsDetails = () => {
   const { id } = useParams();
   const navigate = useNavigate();
   const { handleProductById } = useProduct();
   const product = useSelector((state) => state.product.productById);
+
+  const {handleAddToCart} = useCart()
 
   const [selectedAttributes, setSelectedAttributes] = useState({});
   const [selectedVariant, setSelectedVariant] = useState(null);
@@ -31,7 +34,7 @@ const ProductsDetails = () => {
   const getDynamicAttributes = () => {
     const attrMap = {};
     product?.varients?.forEach(v => {
-      console.log(v,"VVVVV")
+     
       if (v.attribute) {
         Object.entries(v.attribute).forEach(([key, value]) => {
           if (!attrMap[key]) attrMap[key] = new Set();
@@ -76,6 +79,7 @@ const ProductsDetails = () => {
   return (
     <div className="min-h-screen bg-[#05070a] text-slate-200 py-12 px-4">
       <div className="max-w-7xl mx-auto">
+      <Nav/>
         
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 bg-[#0d1117] rounded-[3rem] p-8 border border-white/5">
           
@@ -97,7 +101,7 @@ const ProductsDetails = () => {
                   {/* Original Product Photo */}
                   <div 
                     onClick={() => { setSelectedVariant(null); setSelectedAttributes({}); setActiveImage(product.images[0]?.url); }}
-                    className={`min-w-[80px] h-24 rounded-2xl overflow-hidden cursor-pointer border-2 transition-all p-1 ${!selectedVariant ? 'border-cyan-500 bg-cyan-500/10' : 'border-transparent bg-white/5 opacity-40'}`}
+                    className={`min-w-[80px] h-24 rounded-2xl overflow-hidden cursor-pointer border-2 transition-all p-1 ${!selectedVariant ? 'border-emerald-500 bg-cyan-500/10' : 'border-transparent bg-white/5 opacity-40'}`}
                   >
                     <img src={product.images[0]?.url} className="w-full h-full object-cover rounded-xl" />
                   </div>
@@ -107,7 +111,7 @@ const ProductsDetails = () => {
                     <div 
                       key={v._id || i}
                       onClick={() => handleVariantPhotoClick(v)}
-                      className={`min-w-[80px] h-24 rounded-2xl overflow-hidden cursor-pointer border-2 transition-all p-1 ${selectedVariant?._id === v._id ? 'border-cyan-500 bg-cyan-500/10' : 'border-transparent bg-white/5 opacity-40'}`}
+                      className={`min-w-[80px] h-24 rounded-2xl overflow-hidden cursor-pointer border-2 transition-all p-1 ${selectedVariant?._id === v._id ? 'border-emerald-500 bg-cyan-500/10' : 'border-transparent bg-white/5 opacity-40'}`}
                     >
                       <img src={v.images[0]?.url } className="w-full h-full object-cover rounded-xl" />
                     </div>
@@ -121,7 +125,7 @@ const ProductsDetails = () => {
           <div className="flex flex-col">
             <h1 className="text-4xl font-black text-white mb-4 italic tracking-tighter">{product.title}</h1>
             
-            <div className="text-3xl font-mono font-bold text-cyan-400 mb-8">
+            <div className="text-3xl font-mono font-bold text-emerald-400 mb-8">
               ₹{selectedVariant ? selectedVariant.price.amount : product.price.amount}
               
             </div>
@@ -135,7 +139,7 @@ const ProductsDetails = () => {
                   <p className="text-[10px] font-black uppercase text-slate-500 mb-4 tracking-widest">{attrKey}</p>
                   <div className="flex flex-wrap gap-2">
                     {values.map((val) => (  
-                         console.log(val,"ATTRRKEYY"),
+                      
                       <button
                         key={val}
                         onClick={() => setSelectedAttributes(prev => ({ ...prev, [attrKey]: val }))}
@@ -151,7 +155,7 @@ const ProductsDetails = () => {
               ))}
             </div>
 
-            <button className="w-full py-5 bg-cyan-600 text-black font-black uppercase tracking-[0.3em] rounded-2xl hover:bg-white transition-all">
+            <button onClick={() => handleAddToCart(id)} className="w-full py-5 bg-emerald-600 text-black font-black uppercase tracking-[0.3em] rounded-2xl hover:bg-white transition-all">
               {selectedVariant?.stock <= 0 ? "Out of Stock" : "Add to Vault"}
             </button>
           </div>

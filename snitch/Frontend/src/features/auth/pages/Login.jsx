@@ -2,124 +2,121 @@ import React from 'react';
 import { useAuth } from '../hook/useAuth';
 import { useForm } from "react-hook-form";
 import { FcGoogle } from 'react-icons/fc';
-import modelLogin from "../../../assets/Model-Snitch-Login.jpeg"
-import { toast } from 'react-toastify';
-import { useNavigate } from 'react-router-dom';
-// import { useLocation } from 'react-router-dom';
+import { motion } from 'framer-motion';
+import modelLogin from "../../../assets/Model-Snitch-Login.jpeg";
+import { useNavigate, Link } from 'react-router-dom';
 
 const Login = () => {
-const navigate = useNavigate()
-// const location = useLocation()
-// const from = location?.state?.from?.pathname || "/"
-
-// console.log(from,"FROMMM")
+  const navigate = useNavigate();
   const { handleLogin } = useAuth();
   const { register, reset, handleSubmit, formState: { errors } } = useForm();
 
   const onSubmit = async (data) => {
     const user = await handleLogin(data);
-    
     if (user) {
-      toast.success("Login Successful");
       reset();
+      user.role === "buyer" ? navigate("/") : navigate("/getProducts");
     }
-  
-    if(user.role === "buyer"){
-      navigate("/")
-    }else if(user.role === "seller"){
-      navigate( "/getProducts")
-    }
-  
   };
 
   return (
-    <div className="min-h-screen w-full flex justify-center items-center bg-[#050505] text-white font-sans antialiased p-0 md:p-6">
+    <div className="h-screen w-full flex justify-center items-center bg-[#050505] text-white font-sans antialiased overflow-hidden relative">
       
-      {/* Main Container: Responsive Width & Height */}
-      <div className="w-full h-screen md:h-auto md:max-w-5xl flex flex-col md:flex-row bg-[#111] md:rounded-2xl overflow-hidden shadow-2xl relative border-none md:border md:border-white/10">
-        
-        {/* IMAGE SECTION: Becomes the background on mobile, side-panel on desktop */}
-        <div className="absolute inset-0 md:relative md:w-1/2 h-full overflow-hidden">
-          <img 
-            src={modelLogin} 
-            alt="Fashion Editorial" 
-            className="w-full h-full object-cover grayscale opacity-60 md:opacity-80 transition-all duration-1000 hover:scale-110 hover:grayscale-0"
-          />
-          {/* Brand Overlay for Mobile/Desktop */}
-          <div className="absolute top-8 left-8 z-20">
-            <h1 className="text-2xl font-extralight tracking-[0.5em] uppercase border-b border-white/30 pb-2">
-              VOGUE<span className="font-bold">NR</span>
-            </h1>
-          </div>
-          {/* Gradient to darken image for text readability on mobile */}
-          <div className="absolute inset-0 bg-gradient-to-t from-black via-black/20 to-transparent md:hidden"></div>
-        </div>
 
-        {/* FORM SECTION: Glassmorphism on mobile, Solid on desktop */}
-        <div className="relative z-10 w-full md:w-1/2 flex flex-col justify-center items-center px-6 sm:px-12 md:px-16 py-12 bg-black/40 backdrop-blur-md md:bg-[#0A0A0A] md:backdrop-blur-none">
-          
-          <div className="w-full max-w-sm">
-            <header className="mb-10 text-center md:text-left">
-              <h2 className="text-3xl font-light tracking-tight text-white mb-2">Member Login</h2>
-              <p className="text-zinc-400 text-sm tracking-wide">Enter your credentials to access your studio.</p>
+      <div className="absolute top-[-20%] right-[-10%] w-[60%] h-[60%] bg-purple-600/10 blur-[150px] rounded-full" />
+      <div className="absolute bottom-[-20%] left-[-10%] w-[60%] h-[60%] bg-cyan-600/10 blur-[150px] rounded-full" />
+
+      <motion.div 
+        initial={{ opacity: 0, scale: 0.95 }}
+        animate={{ opacity: 1, scale: 1 }}
+        className="w-full h-full sm:h-[650px] sm:max-w-6xl flex bg-[#0A0A0A]/80 backdrop-blur-3xl sm:rounded-[2.5rem] overflow-hidden shadow-[0_50px_100px_rgba(0,0,0,0.8)] border-none sm:border sm:border-white/5 z-10"
+      >
+        
+  
+       
+<div className="hidden md:block md:w-1/2 h-full overflow-hidden relative border-r border-white/5">
+  <img 
+    src={modelLogin} 
+    alt="Fashion Login" 
+  
+    className="w-full h-full object-cover object-top grayscale hover:grayscale-0 opacity-80 hover:scale-105 transition-transform duration-1000"
+  />
+  <div className="absolute top-8 left-8 z-30">
+  <h1 className="text-2xl font-black tracking-[0.5em] uppercase border-b border-white/20 pb-2">
+              VOGUE<span className="text-emerald-500">NR</span>
+            </h1>
+  </div>
+</div>
+
+       
+        <div className="w-full lg:w-1/2 flex flex-col justify-center items-center px-8 sm:px-20 relative">
+          <div className="w-full max-w-md">
+            
+           
+            <div className="lg:hidden text-center mb-10">
+               <h1 className="text-2xl font-black tracking-[0.4em] uppercase text-white">
+                VOGUE<span className="text-emerald-500">NR</span>
+              </h1>
+            </div>
+
+            <header className="mb-10 text-center lg:text-left">
+              <h2 className="text-4xl font-black tracking-tighter text-white mb-2">AUTH_SYSTEM</h2>
+              <p className="text-slate-500 text-[11px] uppercase tracking-[0.2em] font-medium">Verify credentials for secure entry</p>
             </header>
 
-            <a href="/api/auth/google"> <button 
-                          type="button"
-                          className="w-full flex items-center justify-center gap-3 bg-transparent border border-zinc-800 py-3 mb-6 hover:bg-white/5 hover:scale-95 transition-all duration-300 group"
-                        >
-                          <FcGoogle className="text-xl" />
-                          <span className="text-[10px] uppercase tracking-[0.3em] font-medium">Continue with Google</span>
-                        </button></a>
+            {/* Google Login */}
+            <a href="/api/auth/google">
+              <motion.button 
+                whileHover={{ y: -2, backgroundColor: "rgba(255,255,255,0.05)" }}
+                className="w-full flex items-center justify-center gap-4 bg-transparent border border-white/5 py-4 mb-10 rounded-xl transition-all"
+              >
+                <FcGoogle size={20} />
+                <span className="text-[10px] uppercase tracking-[0.4em] font-black text-slate-300">Sync with Google</span>
+              </motion.button>
+            </a>
 
-            <form className="space-y-6" onSubmit={handleSubmit(onSubmit)}>
-              
-              {/* Email Input */}
-              <div className="space-y-2">
-                <label className="text-[10px] uppercase tracking-[0.3em] text-zinc-500 font-bold">Identity</label>
+            <form className="space-y-8" onSubmit={handleSubmit(onSubmit)}>
+              {/* Email Field */}
+              <div className="relative group">
+                <label className="text-[9px] uppercase tracking-[0.4em] text-slate-500 font-black absolute -top-5 left-0">Identity</label>
                 <input 
-                  {...register("email", { required: "Email is required" })} 
-                  className={`w-full bg-white/5 border-b ${errors.email ? 'border-red-500' : 'border-zinc-800'} py-3 px-1 focus:outline-none focus:border-white transition-all placeholder:text-zinc-700`}
+                  {...register("email", { required: "Required" })} 
+                  className={`w-full bg-transparent border-b ${errors.email ? 'border-red-500' : 'border-white/10 group-hover:border-white/30'} py-3 focus:outline-none focus:border-emerald-500 transition-all text-sm tracking-wide`}
                   type="email" 
-                  placeholder="email@studio.com" 
+                  placeholder="USER_ID@VOGUENR.COM" 
                 />
-                {errors.email && <p className="text-red-500 text-[10px] uppercase mt-1">{errors.email.message}</p>}
               </div>
 
-              {/* Password Input */}
-              <div className="space-y-2">
-                <div className="flex justify-between items-center">
-                  <label className="text-[10px] uppercase tracking-[0.3em] text-zinc-500 font-bold">Access Key</label>
-                  <button type="button" className="text-[10px] uppercase text-zinc-600 hover:text-white transition-colors">Recover</button>
-                </div>
+              {/* Password Field */}
+              <div className="relative group pt-4">
+                <label className="text-[9px] uppercase tracking-[0.4em] text-slate-500 font-black absolute top-0 left-0">Access Key</label>
                 <input 
-                  {...register("password", { 
-                    required: "Password required", 
-                    minLength: { value: 6, message: "Security too weak" } 
-                  })} 
-                  className={`w-full bg-white/5 border-b ${errors.password ? 'border-red-500' : 'border-zinc-800'} py-3 px-1 focus:outline-none focus:border-white transition-all placeholder:text-zinc-700`}
+                  {...register("password", { required: "Required" })} 
+                  className={`w-full bg-transparent border-b ${errors.password ? 'border-red-500' : 'border-white/10 group-hover:border-white/30'} py-3 focus:outline-none focus:border-emerald-500 transition-all text-sm tracking-wide`}
                   type="password" 
                   placeholder="••••••••" 
                 />
-                {errors.password && <p className="text-red-500 text-[10px] uppercase mt-1">{errors.password.message}</p>}
               </div>
 
               {/* Action Button */}
-              <button className="w-full bg-white text-black py-4 mt-4 uppercase text-[11px] tracking-[0.4em] font-black hover:bg-zinc-200 active:scale-95 transition-all duration-300">
-                Sign In
-              </button>
+              <motion.button 
+                whileHover={{ scale: 1.02 }}
+                whileTap={{ scale: 0.98 }}
+                className="w-full bg-white text-black py-5 uppercase text-[11px] tracking-[0.5em] font-black hover:bg-emerald-400 transition-all rounded-xl shadow-[0_20px_40px_rgba(255,255,255,0.05)]"
+              >
+                Access Account
+              </motion.button>
 
-              <footer className="pt-8 text-center">
-                <p className="text-xs text-zinc-500 tracking-widest">
-                  Not a member? <a href="#" className="text-white hover:underline underline-offset-8">Join the Club</a>
+              <footer className="pt-8 text-center lg:text-left flex justify-between items-center border-t border-white/5 mt-10">
+                <p className="text-[10px] text-slate-500 uppercase tracking-widest">
+                  No Key? <Link to="/register" className="text-white font-bold ml-2 hover:text-emerald-500 transition-colors underline-offset-4">Register</Link>
                 </p>
-                
+                <Link to="/" className="text-[10px] text-slate-700 uppercase tracking-widest hover:text-white transition-all">Support</Link>
               </footer>
             </form>
           </div>
         </div>
-        
-      </div>
+      </motion.div>
     </div>
   );
 };

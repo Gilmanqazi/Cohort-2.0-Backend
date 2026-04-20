@@ -10,8 +10,6 @@ export const createProducts = async (formData) =>{
 
   try {
     const res = await api.post("/",formData)
-
-    console.log(res)
     return res.data
   } catch (error) {
     console.log(error)
@@ -32,45 +30,28 @@ export const getSellerProducts = async ()=>{
 }
 
 export const getAllProducts = async () =>{
+try {
   const res = await api.get("/")
-  console.log(res.data)
   return res.data
+} catch (error) {
+  console.log(error)
+  throw error
+}
 }
 
 
 export const getProductById = async (id) =>{
  try {
-  console.log("Requesting URL:", `/products/${id}`);
+
   const res = await api.get(`/${id}`)
 
   return res.data
  } catch (error) {
-  console.error(error,"ERR")
+  console.error(error,)
+  throw error
  }
 
 }
-
-export const addToCart = async (productId) =>{
-  try {
-    const res = await api.post("/cart",{productId})
-    return res.data
-  } catch (error) {
-    console.log(error)
-    throw error
-  }
-}
-
-export const getAddToCart = async () =>{
-  try {
-    const res = await api.get("/cart/getUserCart")
-    console.log(res.data)
-    return res.data
-  } catch (error) {
-    console.log(error)
-    throw error
-  }
-}
-
 
 export const addProductVariants = async (productId,newProductVariant) =>{
 
@@ -85,7 +66,28 @@ export const addProductVariants = async (productId,newProductVariant) =>{
   formData.append("attributes",JSON.stringify(newProductVariant.attributes))
 
   const res = await api.post(`/${productId}/add-Varints`,formData)
-  console.log(res.data)
   return res.data
 
 }
+
+export const deleteProductService = async (productId) => {
+  try {
+    const res = await api.delete(`/delete/${productId}`);
+  return res.data;
+  } catch (error) {
+    console.log(error)
+    throw error
+  }
+};
+
+export const getSearchProduct = async (query)=>{
+try {
+  const res = await api.get(`/search?q=${query}`)
+return res.data
+} catch (error) {
+  console.log(error)
+  throw error
+}
+}
+
+
