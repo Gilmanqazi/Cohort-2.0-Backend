@@ -71,6 +71,7 @@ of:String
   ]
 },{timestamp:true})
 
+productSchema.index({title:"text",description:"text"})
 
 const productModel = mongoose.model("products",productSchema)
 

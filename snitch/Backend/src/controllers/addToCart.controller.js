@@ -3,50 +3,58 @@ import productModel from "../models/product.model.js";
 
 
 
-export const addToCartController = async (req,res)=>{
+export const addToCartController = async (req, res) => {
+  try {
+   
+    const { productId, quantity = 1 } = req.body; 
+    const userId = req.user.id;
 
-  const {productId } = req.body
-  const userId = req.user.id
+    const product = await productModel.findById(productId);
+    if (!product) return res.status(404).json({ message: "Product Not Found" });
 
-const product = await productModel.findById(productId)
+    let cart = await addToCardModel.findOne({ userId });
 
-if(!product){
-  return res.status(404).json({
-    message:"Product Not Found"
-  })
-}
+    if (!cart) {
+      cart = await addToCardModel.create({
+        userId,
+        items: [{ productId, quantity }]
+      });
+    } else {
+      
+      const itemIndex = cart.items.findIndex(item => item.productId.toString() === productId);
 
-let cart = await addToCardModel.findOne({userId}) 
+      if (itemIndex > -1) {
+        if (req.body.quantity) {
+            cart.items[itemIndex].quantity = quantity; 
+        } else {
+            cart.items[itemIndex].quantity += 1; 
+        }
+      } else {
+   
+        cart.items.push({ productId, quantity });
+      }
+    }
 
-if(!cart){
- cart = await addToCardModel.create({
-    userId,
-    items:[
-      {productId:productId,quantity:1}
-    ]
-  })
-  
-}else{
-  const itemIndex = cart.items.findIndex(item => item.productId.toString() === productId)
+    await cart.save();
+    
+    
+    const updatedCart = await addToCardModel.findById(cart._id).populate("items.productId");
+    res.status(200).json({ 
+      success: true, 
+      message: "Cart updated", 
+      items: updatedCart.items 
+    });
 
-  if(itemIndex > -1){
-    cart.items[itemIndex].quantity +=1
-  }else{
-    cart.items.push({productId,quantity:1})
+  } catch (error) {
+    res.status(500).json({ success: false, message: error.message });
   }
-}
-
-await cart.save();
-res.status(200).json({ message: "Cart updated", cart });
-
-}
+};
 
 export const getAddToCartProdcuts = async (req,res)=>{
   try {
     const userId = req.user.id
 
   const getCarts = await addToCardModel.findOne({userId}).populate("items.productId")
-
   
   if(!getCarts){
     return res.status(200).json({ items: [] });
@@ -62,3 +70,5 @@ export const getAddToCartProdcuts = async (req,res)=>{
     
   }
 }
+
+

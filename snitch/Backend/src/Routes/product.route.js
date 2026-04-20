@@ -1,7 +1,7 @@
 import express from "express"
 import multer from "multer"
 import {  authenticationSeller } from "../middleware/auth.middleware.js"
-import { addVarientToProduct, createProducts, deleteProduct, getAllProducts,  getProductById, getSellerProducts } from "../controllers/product.controller.js"
+import { addVarientToProduct, createProducts, deleteProduct, getAllProducts,  getProductById, getSellerProducts, searchProduct } from "../controllers/product.controller.js"
 import { createProductValidator } from "../validator/product.validator.js"
 
 
@@ -24,7 +24,10 @@ Routes.get("/seller",authenticationSeller,getSellerProducts)
 Routes.delete("/delete/:id",authenticationSeller,deleteProduct)
 
 Routes.get("/",getAllProducts)
+Routes.get("/search",searchProduct)
+
 
 Routes.get("/:id",getProductById)
+
 
 export default Routes

@@ -71,6 +71,9 @@ try {
 
   const user = await userModel.findOne({email}).select("+password")
  
+  if(!user){
+    return res.status(401).json({success:false,message:"Invalid Credentials"})
+  }
 
   const isMatch = await user.comparePassword(password);
   if (!isMatch) return res.status(401).json({ message: 'Invalid email or password' });
@@ -79,7 +82,8 @@ try {
   await sendTokenResponse(user,res,"Login Successfull")
 } catch (error) {
   res.status(500).json({
-    message:error.message
+    message:error.message,
+    message:"Server Error"
   })
   console.log(error)
 }
