@@ -18,12 +18,14 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 /**
- * 🛠️ PATH CORRECTION:
- * Render par folder structure ke mutabiq frontend ko point karein.
+ * 🛠️ DYNAMIC PATH LOGIC (Local vs Render)
+ * Render par environment variable 'RENDER' automatically true hota hai.
  */
-const frontendPath = path.resolve(__dirname, "..", "..", "Frontend", "dist");
+const frontendPath = process.env.RENDER 
+    ? path.join(process.cwd(), "..", "Frontend", "dist") // Render structure
+    : path.resolve(__dirname, "..", "..", "Frontend", "dist"); // Local structure
 
-// Path validation log (Terminal mein check karein)
+// Server log for debugging
 if (fs.existsSync(frontendPath)) {
     console.log("✅ Frontend Dist Found at:", frontendPath);
 } else {
@@ -56,26 +58,29 @@ passport.use(new GoogleStrategy({
 }
 ))
 
-// 3. API ROUTES (Pehle check hote hain)
+// 3. API ROUTES
 app.use("/api/auth", authRouter)
 app.use("/api/products", Routes)
 app.use("/api/products", cartRoute)
 
-// 4. STATIC FILES (Frontend ke CSS/JS assets ke liye)
+// 4. STATIC FILES (Frontend build serve karein)
 app.use(express.static(frontendPath));
 
 /**
- * 5. CATCH-ALL MIDDLEWARE:
- * Isse 'PathError' nahi aayega kyunki hum string pattern matching nahi kar rahe.
- * Yeh har non-API request ko index.html par redirect karega (SPA Routing).
+ * 5. CATCH-ALL MIDDLEWARE (SPA Routing Fix)
+ * Isse /login, /cart, /register par 'Not Found' error nahi aayega.
+ * 'PathError' se bachne ke liye hum generic middleware use kar rahe hain.
  */
 app.use((req, res, next) => {
-    // Agar request API ki nahi hai (jaise /login, /cart, /home)
     if (!req.path.startsWith("/api")) {
-        res.sendFile(path.join(frontendPath, "index.html"));
+        const indexPath = path.join(frontendPath, "index.html");
+        if (fs.existsSync(indexPath)) {
+            res.sendFile(indexPath);
+        } else {
+            res.status(404).send("Frontend build not found. Please run 'npm run build'.");
+        }
     } else {
-        // Agar /api wali request yahan tak aayi, matlab backend mein route nahi mila
-        res.status(404).json({ message: "API Route not found" });
+        res.status(404).json({ success: false, message: "API Route not found" });
     }
 });
 
