@@ -11,7 +11,7 @@ const authRouter = express()
 authRouter.post("/register",registerValidator,registerController)
 authRouter.post("/login",loginValidator,loginController)
 authRouter.get("/google",passport.authenticate("google", {scope:["profile","email"]}),)
-authRouter.get("/google/callback", passport.authenticate("google",{session:false,failureRedirect:config.NODE_ENV == "develpoment" ? "https://cohort-2-0-backend-17.onrender.com/login" : "/login"}),googleCallback)
+authRouter.get("/google/callback", passport.authenticate("google",{session:false,failureRedirect: "https://cohort-2-0-backend-17.onrender.com/login"}),googleCallback)
 authRouter.get("/getMe",authenticateUser,getMe)
 
 export default authRouter

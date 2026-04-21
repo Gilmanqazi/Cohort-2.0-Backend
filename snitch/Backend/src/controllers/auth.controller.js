@@ -117,9 +117,13 @@ const token = jwt.sign({
 
 config.JWT_SECRET,{expiresIn:"7d"})
 
-res.cookie("token",token)
+res.cookie("token", token, {
+  httpOnly: true,
+  secure: true,
+  sameSite: "None"
+});
 
-res.redirect("http://localhost:5173/")
+res.redirect("https://cohort-2-0-backend-17.onrender.com/")
 
 } catch (error) {
   console.error("Google Auth Error",error)

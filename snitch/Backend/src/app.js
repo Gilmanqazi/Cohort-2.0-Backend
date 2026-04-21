@@ -15,7 +15,7 @@ app.use(passport.initialize())
 passport.use(new GoogleStrategy({
 clientID:config.GOOGLE_CLIENT_ID,
 clientSecret:config.GOOGLE_CLIENT_SECRET,
-callbackURL:"https://cohort-2-0-backend-17.onrender.com/api/auth/google/callback"
+callbackURL:"https://cohort-2-0-backend-16.onrender.com/api/auth/google/callback"
 },
 (accessToken,refreshToken,profile,done) =>{
   return done(null, profile)
