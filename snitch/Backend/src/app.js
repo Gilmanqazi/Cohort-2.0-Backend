@@ -27,7 +27,7 @@ app.use(morgan("dev"))
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser())
 app.use(cors({
-  origin: "https://cohort-2-0-backend-17.onrender.com",
+  origin: "https://voguenr-frontend-ecommerce.onrender.com",
   methods: [ "GET", "POST", "PUT", "DELETE" ],
   credentials: true
 }))
