@@ -1,4 +1,4 @@
-import {createBrowserRouter} from "react-router-dom"
+import {createHashRouter } from "react-router-dom"
 import Register from "../features/auth/pages/Register"
 import Login from "../features/auth/pages/Login"
 import CreateProduct from "../features/products/pages/CreateProducts"
@@ -14,7 +14,7 @@ import NotFound from "../features/products/components/NotFound"
 
 
 
-export const router = createBrowserRouter([
+export const router = createHashRouter ([
   {
     path:"/",
     element:<Home/>
