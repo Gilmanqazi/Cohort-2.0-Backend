@@ -65,7 +65,7 @@ const Login = () => {
             </header>
 
             {/* Google Login */}
-            <a href="/api/auth/google">
+            <a href="https://cohort-2-0-backend-16.onrender.com/api/auth/google">
               <motion.button 
                 whileHover={{ y: -2, backgroundColor: "rgba(255,255,255,0.05)" }}
                 className="w-full flex items-center justify-center gap-4 bg-transparent border border-white/5 py-4 mb-10 rounded-xl transition-all"
