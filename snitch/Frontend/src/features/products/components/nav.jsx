@@ -9,18 +9,28 @@ const Nav = () => {
   const navigate = useNavigate();
   const location = useLocation();
 
-  // ✅ FIX: user + loading dono lo
   const { user, loading } = useSelector((state) => state.auth);
   const cart = useSelector((state) => state.product.addToCard);
   const count = cart?.cart?.items?.length || 0;
 
+  // 🔥 Seller check
+  const isSeller = user?.role === "seller";
+
+  // 🔥 Dynamic Nav Links
   const navLinks = [
     { name: "Home", path: "/" },
     { name: "Collection", path: "/collection" },
-    { name: "Archive", path: "/archive" }
+    { name: "Archive", path: "/archive" },
+
+    ...(isSeller
+      ? [
+          { name: "Create", path: "/createProduct" },
+          { name: "MyProducts", path: "/getProducts" },
+        ]
+      : [])
   ];
 
-  // 🔥 FIX: jab tak auth load ho raha hai → kuch bhi render mat karo
+  // 🔥 Loading guard (NO FLICKER)
   if (loading) {
     return (
       <nav className="fixed top-0 left-0 right-0 z-[100] bg-[#05070a] h-[70px]" />
@@ -36,13 +46,9 @@ const Nav = () => {
           className="flex items-center gap-3 cursor-pointer group" 
           onClick={() => navigate("/")}
         >
-          <div className="relative">
-            <div className="w-9 h-9 bg-white text-black flex items-center justify-center font-black text-sm rounded-sm group-hover:bg-emerald-500 transition-colors duration-500">
-              V
-            </div>
-            <div className="absolute -bottom-1 -right-1 w-2.5 h-2.5 bg-emerald-500 rounded-full border-2 border-[#05070a]" />
+          <div className="w-9 h-9 bg-white text-black flex items-center justify-center font-black text-sm rounded-sm">
+            V
           </div>
-          
           <h1 className="text-xl font-black tracking-[0.3em] text-white uppercase">
             VOGUE<span className="text-emerald-500">NR</span>
           </h1>
@@ -53,7 +59,7 @@ const Nav = () => {
           <SearchBar />
         </div>
 
-        {/* Right Section */}
+        {/* Right */}
         <div className="flex items-center gap-6 md:gap-8">
 
           {/* Nav Links */}
@@ -91,29 +97,59 @@ const Nav = () => {
               )}
             </div>
 
-            {/* 🔥 AUTH SECTION FIX */}
-            {user ? (
+            {/* 🔥 AUTH SECTION */}
+            {!user ? (
               <div className="hidden md:flex items-center gap-3">
-                <button onClick={() => navigate("/login")}>
+                <button 
+                  onClick={() => navigate("/login")}
+                  className="text-slate-400 hover:text-white text-xs"
+                >
                   Login
                 </button>
-                <button onClick={() => navigate("/register")}>
+                <button 
+                  onClick={() => navigate("/register")}
+                  className="bg-white text-black px-3 py-1 text-xs rounded"
+                >
                   Register
                 </button>
               </div>
             ) : (
-              <div onClick={() => navigate("/profile")} className="cursor-pointer">
-                <User size={18} className="text-slate-300" />
+              <div className="flex items-center gap-3">
+
+                {/* Seller Button */}
+                {isSeller && (
+                  <button 
+                    onClick={() => navigate("/createProduct")}
+                    className="text-emerald-400 text-xs"
+                  >
+                    Sell
+                  </button>
+                )}
+
+                {/* Profile */}
+                <div 
+                  onClick={() => navigate("/profile")} 
+                  className="cursor-pointer"
+                >
+                  <User size={18} className="text-slate-300" />
+                </div>
               </div>
             )}
 
             {/* Mobile */}
             <div className="flex md:hidden items-center gap-2">
-              {user && (
+              {!user && (
                 <div onClick={() => navigate("/login")}>
                   <LogIn size={20} />
                 </div>
               )}
+
+              {isSeller && (
+                <div onClick={() => navigate("/createProduct")}>
+                  🛒
+                </div>
+              )}
+
               <Menu size={20} />
             </div>
 
