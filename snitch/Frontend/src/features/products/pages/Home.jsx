@@ -7,6 +7,7 @@ import { useCart } from "../cart/Hook/userCart";
 import { ShoppingBag, ArrowUpRight, Sparkles } from "lucide-react";
 import Nav from "../components/nav";
 
+
 const Home = () => {
   const navigate = useNavigate();
   const products = useSelector((state) => state.product.products);
@@ -33,7 +34,7 @@ const Home = () => {
       <div className="fixed top-[-10%] left-[-10%] w-[50%] h-[50%] bg-cyan-600/5 blur-[150px] rounded-full -z-10 animate-pulse" />
       <div className="fixed bottom-[-10%] right-[-10%] w-[50%] h-[50%] bg-purple-600/5 blur-[150px] rounded-full -z-10" />
 
-      <Nav />
+<Nav/>
 
       {/* --- Hero Section --- */}
       <header className="relative pt-32 pb-20 px-6 overflow-hidden">
