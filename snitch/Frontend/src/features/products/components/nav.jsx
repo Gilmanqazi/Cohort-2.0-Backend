@@ -92,7 +92,7 @@ const Nav = () => {
             </div>
 
             {/* 🔥 AUTH SECTION FIX */}
-            {!user ? (
+            {user ? (
               <div className="hidden md:flex items-center gap-3">
                 <button onClick={() => navigate("/login")}>
                   Login
@@ -109,7 +109,7 @@ const Nav = () => {
 
             {/* Mobile */}
             <div className="flex md:hidden items-center gap-2">
-              {!user && (
+              {user && (
                 <div onClick={() => navigate("/login")}>
                   <LogIn size={20} />
                 </div>
