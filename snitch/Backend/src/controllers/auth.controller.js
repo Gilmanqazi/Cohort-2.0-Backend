@@ -123,7 +123,7 @@ res.cookie("token", token, {
   sameSite: "None"
 });
 
-res.redirect("https://voguenr-frontend-ecommerce.onrender.com")
+res.redirect("https://voguenr-frontend-ecommerce.onrender.com/")
 
 } catch (error) {
   console.error("Google Auth Error",error)
