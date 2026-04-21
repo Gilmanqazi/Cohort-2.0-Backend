@@ -1,7 +1,8 @@
 import { useDispatch } from "react-redux";
 import { register, login, getMe } from "../service/auth.api";
-import { setUser, setLoading, setError } from "../state/auth.slice";
+
 import { toast } from "react-toastify";
+import { setError, setLoading, setUser } from "../state/auth.alice";
 
 export const useAuth = () => {
   const dispatch = useDispatch()
