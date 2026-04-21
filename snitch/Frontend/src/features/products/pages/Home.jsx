@@ -89,28 +89,28 @@ const Home = () => {
                 </div>
 
                 {/* 🔥 DESKTOP HOVER */}
-                <div className="hidden md:flex absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition items-center justify-center flex-col gap-3">
-                  <button
-                    onClick={() => handleAddToCart(item._id)}
-                    className="px-6 py-2 bg-white text-black rounded-full text-sm"
-                  >
-                    Add to Cart
-                  </button>
+                <div className="hidden md:flex flex-col gap-2 px-4 pb-4">
+  <button
+    onClick={() => handleAddToCart(item._id)}
+    className="w-full py-2 bg-white text-black rounded-lg text-sm hover:bg-emerald-400 transition"
+  >
+    Add to Cart
+  </button>
 
-                  <button
-                    onClick={() => navigate(`/products/${item._id}`)}
-                    className="px-6 py-2 border border-white rounded-full text-sm"
-                  >
-                    View Details
-                  </button>
+  <button
+    onClick={() => navigate(`/products/${item._id}`)}
+    className="w-full py-2 border border-white rounded-lg text-sm hover:bg-white/10 transition"
+  >
+    View Details
+  </button>
 
-                  <button
-                    onClick={() => navigate("/checkout")}
-                    className="px-6 py-2 border border-white rounded-full text-sm"
-                  >
-                    Buy Now
-                  </button>
-                </div>
+  <button
+    onClick={() => navigate("/checkout")}
+    className="w-full py-2 bg-emerald-500 text-black rounded-lg text-sm hover:bg-emerald-400 transition"
+  >
+    Buy Now
+  </button>
+</div>
               </div>
             </motion.div>
           ))}
