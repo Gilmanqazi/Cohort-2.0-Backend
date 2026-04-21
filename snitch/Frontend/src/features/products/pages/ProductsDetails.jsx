@@ -18,6 +18,8 @@ const ProductsDetails = () => {
   const [selectedVariant, setSelectedVariant] = useState(null);
   const [activeImage, setActiveImage] = useState("");
 
+ 
+
   useEffect(() => {
     if (id) handleProductById(id);
     window.scrollTo(0, 0);
@@ -126,7 +128,7 @@ const ProductsDetails = () => {
             <h1 className="text-4xl font-black text-white mb-4 italic tracking-tighter">{product.title}</h1>
             
             <div className="text-3xl font-mono font-bold text-emerald-400 mb-8">
-              ₹{selectedVariant ? selectedVariant.price.amount : product.price.amount}
+              ₹{selectedVariant ? selectedVariant?.price?.amount : product?.price?.amount}
               
             </div>
 
