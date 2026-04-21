@@ -47,24 +47,17 @@ export const useAuth = () => {
     }
   };
 
-  // 🔥 GET CURRENT USER (important for refresh login persist)
   const handleGetMe = async () => {
     try {
-      dispatch(setLoading(true));
-
       const data = await getMe();
-
+  
       if (data?.user) {
-        dispatch(setUser(data.user));
-        return data.user;
+        dispatch(setUser(data.user)); // loading false here
       } else {
         dispatch(setUser(null));
       }
     } catch (error) {
-      dispatch(setUser(null));
-      dispatch(setError("Session expired"));
-    } finally {
-      dispatch(setLoading(false));
+      dispatch(setUser(null)); // loading false here
     }
   };
 
