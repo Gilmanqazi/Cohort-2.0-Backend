@@ -32,7 +32,7 @@ const AddToCartPage = () => {
         {getAllCart.length === 0 ? (
           <div className="text-center py-20 bg-white rounded-2xl shadow-sm">
             <p className="text-gray-500 text-lg">Your cart is feeling a bit light.</p>
-            <button className="mt-4 text-cyan-600 font-semibold hover:underline">
+            <button onClick={()=> {navigate("/")}} className="mt-4 text-cyan-600 font-semibold hover:underline">
               Continue Shopping
             </button>
           </div>
