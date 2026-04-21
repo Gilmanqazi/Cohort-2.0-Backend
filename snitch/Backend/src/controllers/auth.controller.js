@@ -12,10 +12,11 @@ import jwt from "jsonwebtoken"
     id:user._id,
   },config.JWT_SECRET,{expiresIn:"7d"})
 
-  res.cookie("token",token,{
+  res.cookie("token", token, {
     httpOnly: true,
-    secure: false
-  })
+    secure: true,
+    sameSite: "None"
+  });
 
   res.status(200).json({
     message,
