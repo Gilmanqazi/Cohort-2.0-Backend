@@ -25,7 +25,7 @@ const __dirname = path.dirname(__filename);
  * 2. Backend se bahar -> Snitch (Root)
  * 3. Phir Frontend/dist mein entry.
  */
-const frontendPath = path.resolve(__dirname, "..", "..", "..", "Frontend", "dist");
+const frontendPath = path.resolve(__dirname, "..", "..", "Frontend", "dist");
 
 // Server logs mein ye zaroor check karein deploy ke baad
 console.log("📂 Target Frontend Path:", frontendPath);
