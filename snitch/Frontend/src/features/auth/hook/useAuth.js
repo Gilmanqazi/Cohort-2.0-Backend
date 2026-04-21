@@ -4,7 +4,7 @@ import { setUser, setLoading, setError } from "../state/auth.slice";
 import { toast } from "react-toastify";
 
 export const useAuth = () => {
-  const dispatch = useDispatch();
+  const dispatch = useDispatch()
 
   // 🔥 REGISTER
   const handleRegister = async ({ fullname, contact, email, password, isSeller = false }) => {
