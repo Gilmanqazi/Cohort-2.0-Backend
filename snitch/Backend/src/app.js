@@ -18,18 +18,22 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 /**
- * 🛠️ DYNAMIC PATH LOGIC (Local vs Render)
- * Render par environment variable 'RENDER' automatically true hota hai.
+ * 🛠️ FOLDER STRUCTURE PATH LOGIC:
+ * Aapki file 'Backend/src/app.js' mein hai. 
+ * Frontend tak pahunchne ke liye humein 3 steps piche jana hoga:
+ * 1. src se bahar -> Backend
+ * 2. Backend se bahar -> Snitch (Root)
+ * 3. Phir Frontend/dist mein entry.
  */
-const frontendPath = process.env.RENDER 
-    ? path.join(process.cwd(), "..", "Frontend", "dist") // Render structure
-    : path.resolve(__dirname, "..", "..", "Frontend", "dist"); // Local structure
+const frontendPath = path.resolve(__dirname, "..", "..", "..", "Frontend", "dist");
 
-// Server log for debugging
+// Server logs mein ye zaroor check karein deploy ke baad
+console.log("📂 Target Frontend Path:", frontendPath);
+
 if (fs.existsSync(frontendPath)) {
-    console.log("✅ Frontend Dist Found at:", frontendPath);
+    console.log("✅ Frontend Dist Found!");
 } else {
-    console.warn("⚠️ WARNING: Frontend Dist NOT Found! Path checked:", frontendPath);
+    console.warn("⚠️ WARNING: Frontend Dist NOT Found! Make sure 'npm run build' is successful.");
 }
 
 // 1. GLOBAL MIDDLEWARES
@@ -58,29 +62,32 @@ passport.use(new GoogleStrategy({
 }
 ))
 
-// 3. API ROUTES
+// 3. API ROUTES (Inhe pehle rakhein)
 app.use("/api/auth", authRouter)
 app.use("/api/products", Routes)
 app.use("/api/products", cartRoute)
 
-// 4. STATIC FILES (Frontend build serve karein)
+// 4. STATIC FILES (Frontend ke assets serve karne ke liye)
 app.use(express.static(frontendPath));
 
 /**
  * 5. CATCH-ALL MIDDLEWARE (SPA Routing Fix)
- * Isse /login, /cart, /register par 'Not Found' error nahi aayega.
- * 'PathError' se bachne ke liye hum generic middleware use kar rahe hain.
+ * Agar koi route API se match nahi hota, toh seedha index.html bhej dein.
+ * Isse /login, /register, etc. refresh karne par 404 nahi aayega.
  */
 app.use((req, res, next) => {
     if (!req.path.startsWith("/api")) {
         const indexPath = path.join(frontendPath, "index.html");
+        
         if (fs.existsSync(indexPath)) {
             res.sendFile(indexPath);
         } else {
-            res.status(404).send("Frontend build not found. Please run 'npm run build'.");
+            // Agar yahan tak aaya matlab build missing hai
+            res.status(404).send("Frontend build not found. Check Render Build Command.");
         }
     } else {
-        res.status(404).json({ success: false, message: "API Route not found" });
+        // Agar /api wali request galat hai
+        res.status(404).json({ success: false, message: "API endpoint not found" });
     }
 });
 
