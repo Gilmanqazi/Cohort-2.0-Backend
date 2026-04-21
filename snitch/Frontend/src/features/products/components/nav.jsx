@@ -7,7 +7,7 @@ import SearchBar from './SearchBar';
 
 const Nav = () => {
   const navigate = useNavigate();
-  const location = useLocation();
+  const location = useLocation()
   
   // Maan lete hain ki auth state aapke redux mein hai
   // Agar nahi hai toh aap ise apne logic ke hisaab se check kar sakte hain
