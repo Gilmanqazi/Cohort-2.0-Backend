@@ -1,0 +1,16 @@
+# Use the Node.js 20 version based on the lightweight Alpine Linux distribution
+FROM node:20-alpine 
+
+# Copy package.json and package-lock.json to the container
+COPY ./package.json .
+COPY ./package-lock.json .
+
+# Install dependencies
+RUN npm install
+
+# Copy the server.js file to the container
+COPY ./server.js .
+
+# Command to run the application
+CMD ["node","server.js"]
+
