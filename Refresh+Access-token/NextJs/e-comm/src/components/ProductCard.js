@@ -8,7 +8,7 @@ import {
 const ProductCard = ({ product }) => {
   return (
     <Card className="w-full max-w-sm overflow-hidden transition-all duration-300 hover:-translate-y-1 hover:shadow-lg">
-      <Link href={`/product/${product.id}`}>
+      <Link href={`/layout/product/${product.id}`}>
         <div className="relative flex h-52 sm:h-60 md:h-64 items-center justify-center bg-muted p-4">
           <img
             src={product.image}

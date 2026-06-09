@@ -8,10 +8,13 @@ import { Label } from "@/components/ui/label";
 import { useState } from "react";
 import { api } from "../lib/api";
 import { useRouter } from "next/navigation";
+import { useAuth } from "@/context/authContext";
 
 export default function page() {
 
   let router = useRouter()
+
+  let {hydradeUser} = useAuth()
 
 const [formData, setFormData] = useState({})
 
@@ -28,7 +31,7 @@ let handleSubmit  = async (e)=>{
 
     let res = await api.post("/api/auth/login",formData)
 
-    router.push("/home")
+   hydradeUser() 
     
   } catch (error) {
     console.log("Error in login",error)

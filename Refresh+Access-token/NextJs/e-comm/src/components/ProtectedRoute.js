@@ -8,15 +8,20 @@ const ProtectedRoute = ({children}) => {
 
   let router = useRouter()
 
-  let {user} = useAuth()
+  let {user,loading} = useAuth()
+
 
 useEffect(()=>{
 if(!user){
   router.replace("login")
 }
-},[user,router])
+},[user,loading,router])
 
-  return children 
-}
+if(loading) return <h1>Loading...</h1>
 
-export default ProtectedRoute
+if(!user) return null
+
+return children 
+};
+
+export default ProtectedRoute;

@@ -1,6 +1,5 @@
 import { ThemeProvider } from "@/components/themeProvider";
 import "./globals.css";
-import Navbar from "@/components/Navbar";
 import { AuthProvider } from "@/context/authContext";
 
 export const metadata = {
@@ -22,7 +21,7 @@ export default function RootLayout({ children }) {
             defaultTheme="system"
             enableSystem
             disableTransitionOnChange
-          ><Navbar/>
+          >
           <div className="px-8 flex-1">
           {children}
           </div></ThemeProvider>

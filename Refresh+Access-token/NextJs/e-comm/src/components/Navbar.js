@@ -7,8 +7,8 @@ const Navbar = () => {
     <div className='flex justify-between px-8 py-4 items-center'>
       <h1 className='text-xl font-bold'>E-comm</h1>
       <div className='flex gap-4 font-semibold'>
-        <Link href={"/home"}>Home</Link>
-        <Link href={"/product"}>Products</Link>
+        <Link href={"/layout/home"}>Home</Link>
+        <Link href={"/layout/product"}>Products</Link>
       </div>
       <div><ModeToggle/></div>
     </div>
